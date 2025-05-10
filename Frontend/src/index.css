@@ -16,28 +16,25 @@ body {
 }
 
 #signup{
-    background-color:#111;
+    background-color:black;
     height: 110vh;
     width: 100vw;
     padding: 1em; 
 }
 #Login{
-    background-color: #111;
+    background-color: black;
     height: 100vh;
     width: 100vw;
     padding: 1em; 
 }
 .component-container{
     display: flex;
-}
-#car-rental {
-    background-color: black;
-    color: white;
-}
-#carpool{
     background-color: black;
 }
+
+
 #getstarted{
     height: 100vh;
     width: 100vw;
 }
+

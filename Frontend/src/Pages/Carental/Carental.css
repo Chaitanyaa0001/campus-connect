@@ -1,176 +1,186 @@
-#car-rental{
-    background-color: #000000;
-    padding: 1em;
-    width: 100%;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 2em;
- 
+#car-rental {
+  background-color: #000000;
+  padding: 1em;
+  width: 100%;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
 
 }
 
-.car-header p{
-    opacity: 0.6;
+.car-header h1 {
+  color: #3498DB;
+
+}
+
+.car-header p {
+  opacity: 0.6;
 }
 
 .add-car {
-    padding:0.7em 1em ;
-    background-color: #1E97C3;
-    color: white;
-    font-size: 1rem;
-    font-weight: 400;
-    border: none;
-    border-radius: 3px;
-    display: flex;
-    align-self: flex-end;
-    cursor: pointer;
+  padding: 0.7em 1em;
+  background-color: #1E97C3;
+  color: white;
+  font-size: 1rem;
+  font-weight: 400;
+  border: none;
+  border-radius: 3px;
+  display: flex;
+  align-self: flex-end;
+  cursor: pointer;
 }
 
-.car-rental-cards{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1em;
+
+.add-car-form {
+  display: flex;
+  flex-direction: column;
+  border: 1.2px solid #1E97C3;
+  background: #0F0F0F;
+  padding: 15px;
+  border-radius: 8px;
 }
+
+.add-car-form input,
+.add-car-form select {
+  padding: 1em;
+  color: white;
+  background-color: #333333;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+
+.add-car-form textarea {
+  resize: vertical;
+  outline: none;
+  height: 100px;
+  color: white;
+  background-color: #333333;
+  width: 100%;
+  grid-column: span 2;
+  border-radius: 5px;
+}
+
+.add-car-form input:focus,
+.add-car-form select:focus,
+.add-car-form textarea:focus {
+  border: 2px solid #1EAEDB;
+  outline: none;
+}
+.add-car-form input[type="file"] {
+  background-color: transparent !important;
+  color: white;
+  border: none;
+  padding: 0;
+  margin: 1em 0em;
+}
+
+
+
+.file-available {
+  margin: 2em 0em;
+  grid-column: span 2;
+}
+
+input.form-available {
+  grid-column: span 2;
+  color: white;
+}
+
+.submit-ride {
+  padding: 1em;
+  grid-column: span 2;
+  background-color: #1EAEDB;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+.car-rental-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1em;
+}
+
 .car-card {
-    width: 100%;
-    background-color: #0A0A0A;
-    border: 2px solid #0F1A24;
-    padding: 0.25em;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: 
-        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-        box-shadow 0.3s ease-in-out,
-        border-color 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Subtle scale + lift effect */
-.car-card:hover {
-    transform: translateY(-8px) scale(1.02) rotateZ(-0.3deg);
-    box-shadow: 0 10px 30px rgba(30, 151, 195, 0.2);
-    border-color: #1E97C3;
-}
-
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-4px); }
-    100% { transform: translateY(0px); }
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  background-color: #0A0A0A;
+  border: 0.25px solid #1E97C3;
+  padding: 0.25em;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .car-card:hover {
-    animation: float 3s ease-in-out infinite;
+  box-shadow: 0 10px 30px rgba(30, 151, 195, 0.2);
+  border-color: #1E97C3;
 }
 
-/* Add a subtle glow ring on hover */
-.car-card::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    background: linear-gradient(45deg, #1E97C3, #0F1A24);
-    z-index: -1;
-    border-radius: 14px;
-    opacity: 0;
-    transition: opacity 0.4s ease;
+
+.card-img {
+  height: 70%;
+  width: 100%;
 }
 
-.car-card:hover::before {
-    opacity: 0.3;
-}
-
-/* Bonus: smooth image pop-in */
 .card-img img {
-    transition: transform 0.4s ease;
+  width: 100%;
+  height: 100%;
+  border-radius: 7px;
+  background-color: white;
+  object-fit: cover;
 }
 
-.car-card:hover .card-img img {
-    transform: scale(1.05);
+.car-rental-details {
+  padding: 0.8em;
+  flex: 1;
 }
 
-/* Disable all hover animations for cards marked as disabled */
-.disabled-card {
-    pointer-events: none; 
-    transform: none !important;
-    box-shadow: none !important;
-    border-color: #333 !important;
-    animation: none !important;
+.name {
+  margin-bottom: 0.5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.disabled-card:hover::before,
-.disabled-card::before {
-    opacity: 0 !important;
+.name h2 {
+  font-size: 1.32rem;
 }
 
-/* Optional: Desaturate or dim the card visually */
-.disabled-card {
-    filter: grayscale(70%) brightness(0.8);
-    opacity: 0.8;
+.car-rental-details .name .amount {
+  color: #1EAEDB;
+  border: 1px solid #3498DB;
+  border-radius: 20px;
+  padding: 0.15em;
+  background-color: #1e97c363;
 }
 
-
-.card-img{
-    width: 100%;
-    position: relative;
-
-}
-.card-img img {
-    width: 100%;
-    border-radius: 3px;
-    background-color: white;
-}
-.card-img span{
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    background-color: red;
-    color: white;
-    border-radius: 3px;
-    padding: 0.10em;
-}
-.car-rental-details{
-    margin: 1em;
-    /* background-color: #1E97C3; */
-}
-.car-rental-details h2{
-    font-size: 1rem;
-}
-.car-rental-details p{
-    opacity: 0.6;
-}
-.car-rental-details span{
-    color: #1E97C3;
-    font-size: 1.5rem;
-}
-.available{
-    display: flex;
-    justify-content: space-between;
-    padding: 1em;
-}
-.car-rental-details .rent-button{
-    padding: 1em;
-    width: 100%;
-    border-radius:10px ;
-    background-color:#1E97C3 ;
-    color: white;
-    font-size: 1rem;
-}
-.car-rental-details .rent-button:hover{
-    box-shadow: 2px 2px 5px white;
-    transition: 0.2s ease-in-out;
-}
-.disabled {
-    background-color: #444 !important;
-    color: #aaa !important;
-    cursor: not-allowed !important;
-    pointer-events: none;
-    transition: none;
-    animation: none;
+.available {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-  
-  
+.available span {
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.car-description {
+  margin: 0.5em 0em;
+  font-size: 0.9rem;
+  opacity: 0.5;
+}
+
+.contact-owner {
+  width: 100%;
+  border-radius: 10px;
+  color: #1E97C3;
+  font-size: 1rem;
+  padding: 1em 0.8em;
+}

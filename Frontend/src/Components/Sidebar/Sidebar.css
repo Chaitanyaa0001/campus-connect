@@ -65,8 +65,14 @@
     border-radius: 50%;
     object-fit: cover;
 
-} 
+}
+.user-details a{
+    color: white;
 
+}
+.user-info a{
+
+}
 .user-details{
     width: 50%;
 }
@@ -79,7 +85,6 @@
 }
 .menu{
     display: flex;
-    justify-content: center;
     flex-direction: column;
     gap: 0.5em;
     padding: 1em 0em ;
@@ -89,7 +94,11 @@
     color: white;
     padding: 0.5em;
     border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 1em;
 }
+
 
 .menu a:hover {
     background-color: #322f2f;
@@ -105,4 +114,10 @@
     justify-content: flex-end;
     flex-direction: column;
     margin-bottom: 1em
+}
+
+.bottom-menu button {
+    display: flex;
+    align-items: center;
+    gap: 1em
 }

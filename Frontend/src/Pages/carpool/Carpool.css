@@ -7,8 +7,13 @@
 .carpool-heading{
     margin: 1em 0em 0em 0em;
 }
+.carpool-heading h1 {
+    color: #3498DB;
+
+}
 .add-ride{
     padding: 0.7em 1em;
+    cursor: pointer;
     background-color: #1EAEDB;
     color: white;
     font-size: 1em;
@@ -30,12 +35,12 @@
     gap: 10px;
     background-color: #0F0F0F;
     border: 0.10px solid #1EAEDB;
-    padding:  0em 0.5em;
+    padding:  0em 0.6em;
     border-radius: 5px;
 }
 .search-bar input {
     width: 100%;
-    padding: 1em 0em;
+    padding: 1.2em 0em;
     outline: none;
     border: none;
     background-color: #0F0F0F;
@@ -49,23 +54,31 @@
 /* form  */
 
 .add-ride-form {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
+  margin: 1.2em 0em;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
   gap: 10px;
-  background: #0099cc;
-  padding: 15px;
+  border: 1.2px solid #1EAEDB;
+  background: #0F0F0F;
+  padding: 1em;
   border-radius: 8px;
 }
-
 .add-ride-form input, .add-ride-form select {
-  padding: 12px;
+  padding: 1em;
+  color: white;
   border-radius: 5px;
   border: 1px solid #ccc;
   outline: none;
+  background-color: #333333;
+  border: none;
+}
+.add-ride-form input:focus,
+.add-ride-form select:focus {
+  border: 1px solid  #1EAEDB; 
+  box-shadow: 0 0 0 2px rgba(30, 174, 219, 0.2); 
 }
 .submit-ride {
-  padding: 10px;
+  padding: 1em;
   background-color: #1EAEDB;
   color: white;
   border: none;
@@ -77,12 +90,12 @@
     flex-direction: column;
     gap: 20px;
 }
-.CP-card{
+.CP-card {
     border: 0.01px solid #1EAEDB;
     border-radius: 10px;
+    cursor: pointer;
     width: 100%;
     background-color: #0A0A0A;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
 }
 .CP-card:hover{
     transform: scale(1.01) translateY(-5px);
@@ -94,7 +107,6 @@
     margin: 1em  0em 0.5em 0em;
     margin: 1em;
 }
-
 .driver{
     margin-bottom: 1em;
     opacity: 0.5;
@@ -113,21 +125,20 @@
     justify-content: space-between;
     align-items: center;
     background-color: #0C0F12;
+    border-bottom-left-radius:10px ;
+    border-bottom-right-radius:10px ;
     border-top: 0.1px solid #1EAEDB;
 }
 .CP-bookings button{
     padding: 0.7em 1em;
     border-radius: 7px;
+    border: none;
+    cursor: pointer;
     margin: 1em;
     background-color: #1EAEDB;
     color: white;
 }
-.CP-bookings button:hover{
-    box-shadow: 2px 2px 8px whitesmoke;
-}
 .CP-bookings h3{
     margin: 0em 1em;
 }
-
-
 

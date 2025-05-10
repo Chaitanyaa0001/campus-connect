@@ -1,0 +1,79 @@
+.lostnfoundcontainer{
+    background-color: #0A0A0A;
+    border-radius: 5px;
+    border: 1px solid #3498DB;
+
+}
+
+.lostnfound{
+    display: flex;
+    justify-content: space-between;
+    gap: 3em;
+    padding: 1em;
+
+}
+.lostnfounddetails{
+    display: flex;
+    flex-direction: column;
+}
+  
+  .lostnfoundimg {
+    width: 30%;
+    min-width: 150px;
+  }
+  
+  .lostnfoundimg img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover;
+    background-color: white;
+  }
+  .lostnfounddetails{
+    display: flex;
+
+}
+.lostnfounddetails h3{
+    font-size: 2rem;
+    margin-bottom: 0.5em;
+}
+.lostnfounddetails p{
+    opacity: 0.7;
+}
+
+
+  .contactcard{
+    align-self: flex-end;
+    padding: 0.5em 1em;
+    background: transparent;
+    color: #1E97C3;
+    border: 1px solid #1E97C3;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .lostnfoundcardstatus {
+    margin-top: 1em;
+    padding: 0.3em 0.8em;
+    border-radius: 12px;
+    font-weight: bold;
+    width: fit-content;
+    font-size: 0.85rem;
+  }
+  
+  
+  .lostnfoundcardstatus.lost {
+    color: #ff4d4d;
+    background-color: rgba(255, 77, 77, 0.1);
+    border: 1px solid #ff4d4d;
+  }
+  
+  .lostnfoundcardstatus.found {
+    color: #00cc66;
+    background-color: rgba(0, 204, 102, 0.1);
+    border: 1px solid #00cc66;
+  }
+  
+    
+
+  

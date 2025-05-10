@@ -11,7 +11,7 @@ import {
 
 import './Sidebar.css';
 import logo from "../../assets/Profile.jpg";
-import { NavLink } from 'react-router-dom'; 
+import { NavLink,Link} from 'react-router-dom'; 
 
 const Sidebar = () => {
 
@@ -30,19 +30,19 @@ const Sidebar = () => {
         {isOpen ?  <FaTimes /> : <FaBars />}  
        </div>
 
-      <div className="user-info">
-        <div className="user-img">
-          <img src={logo} alt="user profile" />
-        </div>
-        <div className="user-details">
-          {isOpen && 
-          <div>
-            <h3>Ravi</h3>
-            <p>Ravibsdka0@gmail.com</p>
+       <div className="user-info">
+          <Link to="/user" className="user-img">
+            <img src={logo} alt="user profile" />
+          </Link>
+
+          <div className="user-details">
+            {isOpen && 
+              <Link to="/user">
+                <h3>Ravi</h3>
+                <p>Ravibsdka0@gmail.com</p>
+              </Link>
+             }
           </div>
-          }
-        <div/>
-      </div>
         
       </div>
 

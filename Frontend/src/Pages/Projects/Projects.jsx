@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import './Projects.css';
-import { FaSearch, FaPlusCircle,FaCalendarAlt,FaUsers} from "react-icons/fa";
-
+import { FaSearch, FaPlusCircle, FaCalendarAlt, FaUsers } from "react-icons/fa";
+import { motion } from 'framer-motion';
 
 const Projects = () => {
   const [searchquery, setsearchquery] = useState("");
@@ -26,7 +26,7 @@ const Projects = () => {
       dueDate: "April 30, 2025",
       progress: 40,
       status: "Active",
-      technologies: ["Research","mobile development"]
+      technologies: ["Research", "Mobile Development"]
     },
     {
       title: "Campus Sustainability Initiative",
@@ -36,7 +36,7 @@ const Projects = () => {
       dueDate: "June 10, 2025",
       progress: 55,
       status: "Active",
-      technologies:[ "data analyst "]
+      technologies: ["Data Analyst"]
     }
   ]);
 
@@ -50,6 +50,7 @@ const Projects = () => {
     status: "Active",
     technologies: []
   });
+  const [techInput, setTechInput] = useState("");
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -58,7 +59,7 @@ const Projects = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const techArray = newProject.technologies.split(',').map(tech => tech.trim()); // convert comma-separated techs into array
+    const techArray = techInput.split(',').map(tech => tech.trim());
     setProjects(prev => [...prev, { ...newProject, technologies: techArray }]);
     setNewProject({
       title: "",
@@ -69,6 +70,7 @@ const Projects = () => {
       status: "Active",
       technologies: []
     });
+    setTechInput("");
     setShowForm(false);
   };
 
@@ -84,7 +86,14 @@ const Projects = () => {
   return (
     <div className='component-container'>
       <Sidebar />
-      <div id="projects">
+
+      <motion.div
+        id="projects"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -30 }}
+        transition={{ duration: 0.4 }}
+      >
         <div className="projects-heading">
           <h1>Projects</h1>
           <p>Collaborate on academic and campus projects</p>
@@ -101,7 +110,7 @@ const Projects = () => {
             <textarea name="description" value={newProject.description} onChange={changeHandler} placeholder="Description" required />
             <input type="number" name="members" value={newProject.members} onChange={changeHandler} placeholder="Members" required min="1" />
             <input type="text" name="dueDate" value={newProject.dueDate} onChange={changeHandler} placeholder="Due Date (e.g. June 10, 2025)" required />
-            <input type="text" name="technologies" value={newProject.technologies} onChange={changeHandler} placeholder="Technologies (comma separated)" />
+            <input type="text" name="technologies" value={techInput} onChange={(e) => setTechInput(e.target.value)} placeholder="Technologies (comma separated)" />
             <button type="submit" className='submit-project'>Submit Project</button>
           </form>
         )}
@@ -110,9 +119,9 @@ const Projects = () => {
 
         <div className="search-bar">
           <FaSearch className='Search-icon' />
-          <input 
-            type="text" 
-            placeholder="Search by title, description, or category..." 
+          <input
+            type="text"
+            placeholder="Search by title, description, or category..."
             value={searchquery}
             onChange={(e) => setsearchquery(e.target.value)}
           />
@@ -120,7 +129,7 @@ const Projects = () => {
 
         <div className="project-cards">
           {filteredProjects.map((project, index) => (
-             <div className="project-card" key={index}>
+            <div className="project-card" key={index}>
               <div className="project-header">
                 <h2>{project.title}</h2>
               </div>
@@ -130,16 +139,14 @@ const Projects = () => {
               <div className="project-details">
                 <p className='description'>{project.description}</p>
                 <div className="pro-date">
-                  <p><FaUsers />    {project.members}</p>
-                  <p><FaCalendarAlt />  {project.dueDate}</p>
+                  <p><FaUsers /> {project.members}</p>
+                  <p><FaCalendarAlt /> {project.dueDate}</p>
                 </div>
 
-            
-
                 <div className="technology">
-                  {project.technologies.map((tech) => {
-                    return <span className='tech'>{tech}</span>
-                  })}
+                  {project.technologies.map((tech, i) => (
+                    <span className='tech' key={`${index}-${i}`}>{tech}</span>
+                  ))}
                 </div>
               </div>
 
@@ -149,7 +156,7 @@ const Projects = () => {
             </div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

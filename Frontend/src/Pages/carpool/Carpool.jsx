@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import './Carpool.css';
-import { FaUsers, FaSearch } from "react-icons/fa";
+import { FaUsers, FaSearch, FaMapMarkerAlt, FaClock } from "react-icons/fa";
+import { MdLocationOn, MdAirlineSeatReclineNormal } from 'react-icons/md';
+import { motion } from 'framer-motion'; // ✅ Import Framer Motion
 
 const Carpool = () => {
   const [searchquery, setsearchquery] = useState("");
@@ -11,21 +13,21 @@ const Carpool = () => {
       to: "Downtown",
       time: "Today, 5:30 PM",
       seatsAvailable: 3,
-      pricePerSeat: 5,
+      pricePerSeat: 100,
     },
     {
       from: "College Heights Apartments",
       to: "Science Building",
       time: "Tomorrow, 8:00 AM",
       seatsAvailable: 2,
-      pricePerSeat: 3,
+      pricePerSeat: 150,
     },
     {
       from: "Engineering Building",
       to: "Westside Mall",
       time: "Friday, 4:15 PM",
       seatsAvailable: 3,
-      pricePerSeat: 4,
+      pricePerSeat: 90,
     }
   ]);
 
@@ -68,7 +70,12 @@ const Carpool = () => {
   return (
     <div className='component-container'>
       <Sidebar />
-      <div id="carpool">
+      <motion.div
+        id="carpool"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         <div className="carpool-heading">
           <h1>Carpool</h1>
           <p>Find rides or offer seats in your car</p>
@@ -80,21 +87,56 @@ const Carpool = () => {
 
         {showForm && (
           <form className="add-ride-form" onSubmit={Submithandler}>
-            <input type="text" name="from" value={newRide.from} onChange={changeHandler} placeholder="From" required />
-            <input type="text" name="to" value={newRide.to} onChange={changeHandler} placeholder="To" required />
-            <input type="text" name="time" value={newRide.time} onChange={changeHandler} placeholder="Time (e.g., Tomorrow, 8 AM)" required />
-            <input type="number" name="seatsAvailable" value={newRide.seatsAvailable} onChange={changeHandler} placeholder="Seats Available" required />
-            <input type="number" name="pricePerSeat" value={newRide.pricePerSeat} onChange={changeHandler} placeholder="Price per seat" required />
+            <input
+              type="text"
+              name="from"
+              value={newRide.from}
+              onChange={changeHandler}
+              placeholder="From"
+              required
+            />
+            <input
+              type="text"
+              name="to"
+              value={newRide.to}
+              onChange={changeHandler}
+              placeholder="To"
+              required
+            />
+            <input
+              type="text"
+              name="time"
+              value={newRide.time}
+              onChange={changeHandler}
+              placeholder="Time (e.g., Tomorrow, 8 AM)"
+              required
+            />
+            <input
+              type="number"
+              name="seatsAvailable"
+              value={newRide.seatsAvailable}
+              onChange={changeHandler}
+              placeholder="Seats Available"
+              required
+            />
+            <input
+              type="number"
+              name="pricePerSeat"
+              value={newRide.pricePerSeat}
+              onChange={changeHandler}
+              placeholder="Price per seat"
+              required
+            />
             <button type="submit" className='submit-ride'>Submit Ride</button>
           </form>
         )}
 
         <h2 className='available-ride'>Available rides</h2>
         <div className="search-bar">
-          <FaSearch className='Search-icon'/>
-          <input 
-            type="text" 
-            placeholder="Search by location or driver..." 
+          <FaSearch className='Search-icon' />
+          <input
+            type="text"
+            placeholder="Search by location or time..."
             value={searchquery}
             onChange={(e) => setsearchquery(e.target.value)}
           />
@@ -105,24 +147,23 @@ const Carpool = () => {
             <div className="CP-card" key={index}>
               <div className="location">
                 <h2>{CP.from} to {CP.to}</h2>
-                <button>{CP.type}</button>
               </div>
               <div className="CP-details">
-                <p>{CP.time}</p>
-                <p>{CP.seatsAvailable} seats available</p>
-                <p>From: {CP.from}</p>
-                <p>To: {CP.to}</p>
+                <p><FaClock /> {CP.time}</p>
+                <p><MdAirlineSeatReclineNormal /> {CP.seatsAvailable} seats available</p>
+                <p><FaMapMarkerAlt /> From: {CP.from}</p>
+                <p><MdLocationOn /> To: {CP.to}</p>
               </div>
               <div className="CP-bookings">
-                <h3>${CP.pricePerSeat} per seat</h3>
-                <button>Book Seat</button>
+                <h3>₹{CP.pricePerSeat} per seat</h3>
+                <button>Request Ride</button>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </div>
-  )
-}
+  );
+};
 
 export default Carpool;

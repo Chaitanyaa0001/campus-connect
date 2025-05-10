@@ -7,9 +7,12 @@
 }
 .projects-heading{
     margin-bottom: 1em;
-    
+}
+.projects-heading h1{
+    color: #3498DB;
 }
 .add-project{
+    cursor: pointer;
     padding: 0.8em ;
     background-color: #00BFFF;
     color: white;
@@ -25,13 +28,14 @@
     display: grid;
     grid-template-columns: repeat(2,1fr); 
     gap: 20px; 
-   
 }
-.project-card{
+.project-card {
     border: 0.10px solid #00BFFF;
+    display: flex;
+    flex-direction: column;
     border-radius: 5px;
-    padding: 1em ;
-    background-color: #0A0A0A;
+    padding: 1em;
+    background-color: #0A0A0A; 
 }
 .project-header{
     margin-bottom: 0.1em;
@@ -61,78 +65,79 @@
     margin: 2em 0em;
 }
 .technology {
+    margin-bottom: 1em;
+    display: flex;
+    gap: 15px;
+}
+
+.tech {
     border: 1px solid #0099cc;
     padding: 0.25em ;
+  
     border-radius: 20px;
-    background-color: rgba(128, 128, 128, 0.56);
+    background-color: #124152;
     width: -moz-fit-content;
     width: -webkit-fit-content;
     width: fit-content;
-    margin-bottom: 1em;
 }
+
 .project-booking button {
     width: 100%;
-    padding: 0.7em ;
+    padding: 1em ;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    cursor: pointer;
     background-color:#00BFFF;
     color: white;
 }
-
 .add-project-form {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    background-color: #0F0F0F;
-    border: 1px solid #0099cc;
-    padding: 2em;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin: 20px 0;
-    gap: 15px;
-    width: 100%;
-  }
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background-color: #0F0F0F;
+  border: 1px solid #0099cc;
+  padding: 2em;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 1.2em 0;
+  gap: 15px;
+  width: 100%;
+}
+.add-project-form textarea{
+  grid-column: span 2;
+  resize: vertical;
+  background-color: #333333;
+  min-height: 100px;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+}
+.add-project-form input {
+  padding: 1em ;
+  border: none;
+  font-size: 1rem;
+  background-color: #333333;
+  color: white;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.add-project-form input:focus,
+.add-project-form textarea:focus {
+  border-color:  #00BFFF;
+}
+.submit-project {
+  grid-column: span 2;
+  width: 100%;
+  padding: 1em;
+  background-color: #00BFFF;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 
+}
 
-  
-  
-  .add-project-form input,
-  .add-project-form textarea {
-    padding: 12px 16px;
-
-    font-size: 16px;
-    background-color: white;
-    color: black;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-  
-  .add-project-form input:focus,
-  .add-project-form textarea:focus {
-    border-color: #00BFFF;
-  }
-  
-  .add-project-form textarea {
-    resize: vertical;
-    min-height: 100px;
-  }
-  
-  .submit-project {
-    /* grid-column: 1 / -1;  */
-    grid-column: span 2;
-    width: 100%;
-    padding: 12px;
-    background-color: #00BFFF;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .submit-project:hover {
-    background-color: #0099cc;
-  }
-  
-  

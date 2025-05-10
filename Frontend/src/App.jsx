@@ -10,6 +10,7 @@ import Discussion from './Pages/Discussion/Discussion';
 import Inbox from './Pages/Inbox/Inbox';
 import Projects from './Pages/Projects/Projects';
 import GetStarted from './Pages/GetStarted/GetStarted';
+import User from './Pages/userpage/User';
 
 
 
@@ -20,6 +21,7 @@ const App = () => {
     <>
     
     <Routes>
+      <Route path='/User' element={<User/>}></Route>
       <Route path="/" element={<GetStarted/>} ></Route>   
       <Route path="/signup" element={<Signup/>} ></Route>   
       <Route path="/login" element={<Login/>} ></Route>

@@ -1,10 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import './Discussion.css';
-import { FiUpload  } from 'react-icons/fi';
-import { FaPaperPlane } from 'react-icons/fa';  // Font Awesome
-
-
+import { FiUpload } from 'react-icons/fi';
+import { FaPaperPlane } from 'react-icons/fa';
 
 const Discussion = () => {
   const [messages, setMessages] = useState([
@@ -13,68 +11,63 @@ const Discussion = () => {
   ]);
 
   const [input, setInput] = useState('');
-
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const changeHandler = (e) => {
-    setInput(e.target.value );
-  };
+  const changeHandler = (e) => setInput(e.target.value);
 
   const SubmitHandler = (e) => {
     e.preventDefault();
-
     if (input.trim()) {
-      setMessages([
-        ...messages,
-        { name: 'You', text: input, time: 'Just now' },
-      ]);
-      setInput(''); // Clear input
-      console.log(input);
-      
+      setMessages([...messages, { name: 'You', text: input, time: 'Just now' }]);
+      setInput('');
     }
   };
 
   return (
     <div className="component-container">
       <Sidebar />
+
       <div id="discussion">
-        <div className="dis-header">
-          <h2>Public Discussion</h2>
-          <p>Connect with everyone on campus</p>
-        </div>
         <div className="discussion-container">
           <div className="head">
-            <h3>Wanna Have a Discussion ?</h3>
+            <h3>Wanna Have a Discussion?</h3>
             <span className="online">1 user online 🟢</span>
           </div>
 
           <div className="mess-content">
             {messages.map((msg, idx) => (
-              <div key={idx} 
-              className={`message ${msg.name === 'You' ? 'sent' : 'received'}`}>
+              <div
+                key={idx}
+                className={`message ${msg.name === 'You' ? 'sent' : 'received'}`}
+              >
                 <div className="msg-content">
                   <div className="text">{msg.text}</div>
                   <p>{msg.name} • {msg.time}</p>
                 </div>
               </div>
             ))}
-              <div ref={messagesEndRef} />
+            <div ref={messagesEndRef} />
           </div>
 
           <form onSubmit={SubmitHandler} className="chat-input">
-          <FiUpload   className='Ficon'/>
-            <input
-              type="text"
-              placeholder="Type a message..."
-              value={input}
-              name="message"
-              onChange={changeHandler}
-            />
-            <button type="submit" className="send-btn"><FaPaperPlane/></button>
+            <FiUpload className='Ficon' />
+            <div style={{ flexGrow: 1 }}>
+              <input
+                type="text"
+                placeholder="Type a message..."
+                value={input}
+                name="message"
+                onChange={changeHandler}
+                className="chat-textbox"
+              />
+            </div>
+            <button type="submit" className="send-btn">
+              <FaPaperPlane />
+            </button>
           </form>
         </div>
       </div>
