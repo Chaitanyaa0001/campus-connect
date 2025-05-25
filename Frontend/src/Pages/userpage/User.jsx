@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import './User.css';
+import { NavLink } from 'react-router-dom';
 import logo from '../../assets/Profile.jpg'
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, styleEffect } from 'framer-motion';
 
 import {
   FaCar,
   FaUsers,
   FaSearch,
   FaFolderOpen,
+  FaUserAlt
 } from "react-icons/fa";
 import Carpoolcard from '../../Components/carpoolcards/Carpoolcard';
 import Carrentalcard from '../../Components/carrentalcards/Carrentalcard';
@@ -19,6 +21,7 @@ const User = () => {
   const [selectedCategory, setSelectedCategory] = useState('profile');
 
   const [showDeleteInput, setShowDeleteInput] = useState(false);
+  const [isOpen, setisOpen] = useState(true)
 
   const [userdata, setuserdata] = useState({
     username: '',
@@ -53,7 +56,6 @@ const User = () => {
     if (userdata.deleteConfirm.toLowerCase() === 'delete') {
       alert('Your account has been deleted.');
 
-      // Reset all form values
       setuserdata({
         username: '',
         email: '',
@@ -64,7 +66,7 @@ const User = () => {
       });
       setShowDeleteInput(false);
 
-      // TODO: Add actual backend API call to delete account
+     
     } else {
       alert("Please type 'delete' to confirm account deletion.");
     }
@@ -244,11 +246,11 @@ const User = () => {
         </div>
 
         <div className="filter-buttons">
-          <button onClick={() => setSelectedCategory('profile')}> Profile</button>
-          <button onClick={() => setSelectedCategory('carpools')}><FaUsers />Carpools</button>
-          <button onClick={() => setSelectedCategory('carrental')}><FaCar/>Car Rentals</button>
-          <button onClick={() => setSelectedCategory('lostnfound')}><FaSearch/>Lost & Found</button>
-          <button onClick={() => setSelectedCategory('projects')}><FaFolderOpen/>Projects</button>
+          <NavLink  onClick={() => setSelectedCategory('profile') }className={({ isActive }) => isActive ? 'active' : ''} > <FaUserAlt/> {isOpen && 'profile'}</NavLink>
+          <NavLink  onClick={() => setSelectedCategory('carpools')}className={({ isActive }) => isActive ? 'active' : ''}><FaUsers />{isOpen && 'Carpool'}</NavLink>
+          <NavLink  onClick={() => setSelectedCategory('carrental')}className={({ isActive }) => isActive ? 'active' : ''}><FaCar/>{isOpen && 'Carrental'}</NavLink>
+          <NavLink  onClick={() => setSelectedCategory('lostnfound')}className={({ isActive }) => isActive ? 'active' : ''}><FaSearch/>{isOpen && 'Lost & Found'}</NavLink>
+          <NavLink  onClick={() => setSelectedCategory('projects')}className={({ isActive }) => isActive ? 'active' : ''}><FaFolderOpen/>{isOpen && 'Projects'}</NavLink>
         </div>
 
       <AnimatePresence mode="wait">

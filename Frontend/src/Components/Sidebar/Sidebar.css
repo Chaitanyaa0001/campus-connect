@@ -41,8 +41,6 @@
     text-shadow: 0px 3px 10px #00bfff;
   }
   
- 
-  
   .close-btn {
     font-size: 0.7rem;
     width: 10%;
@@ -64,15 +62,12 @@
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
-
 }
 .user-details a{
     color: white;
 
 }
-.user-info a{
 
-}
 .user-details{
     width: 50%;
 }

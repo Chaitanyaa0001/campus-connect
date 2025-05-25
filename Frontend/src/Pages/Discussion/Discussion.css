@@ -5,16 +5,7 @@
   background-color: black;
  
 }
-/* .dis-header{
-  margin: 1em 0em;
-}
-.dis-header h2{
-  font-size: 2rem;
 
-}
-.dis-header p{
-  opacity: 0.7;
-} */
 .discussion-container{
   background-color: #0A0A0A;
   width: 100%;
@@ -83,37 +74,36 @@
   #discussion form{
   display: flex;
   gap:10px;
+  align-items: center;
   padding: 1em;
   width: 100%;
 }
-.Ficon{
-  width: 2.5%;
-  height: 40px;
-  cursor: pointer;
-}
+
 .chat-input input {
-  width: 90%;
+  width: 100%;
   border-radius: 10px;
   outline: none;
   border:  2px solid #00BFFF;
   padding: 1em;
 }
-
-.chat-input input:hover{
-  box-shadow: 1px 1px 2px #007bff ;
-  border: 3px solid #00BFFF;
+.Ficon{
+  width: 5%;
+ 
+  cursor: pointer;
 }
-
-
 .chat-input button{
-  width: 50px;
-  height: 50px;
-  font-size: 1.5rem;
-  border-radius: 50%;
+  /* font-size: 1.5rem; */
+  padding: 0.6em;
+  width: 6%;
+  border-radius: 10px;
   background-color: #00BFFF;
   color: white;
   border: none;
   transition: 0.2s ease-in-out ;
+}
+.chat-input input:hover{
+  box-shadow: 1px 1px 2px #007bff ;
+  border: 3px solid #00BFFF;
 }
 .chat-input button:hover{
   transition: 0.5s;

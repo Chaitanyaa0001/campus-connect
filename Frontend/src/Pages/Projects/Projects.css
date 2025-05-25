@@ -123,9 +123,16 @@
   outline: none;
   transition: border-color 0.3s;
 }
+.add-project-form input[type="date"] {
+  padding: 8px;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+}
+
 .add-project-form input:focus,
 .add-project-form textarea:focus {
-  border-color:  #00BFFF;
+  border: 1px solid #00BFFF;
 }
 .submit-project {
   grid-column: span 2;

@@ -11,7 +11,7 @@ const Inbox = () => {
 
       <div id="inbox">
         <div className="dm-container">
-          {/* Search bar without animation */}
+      
           <div className="inbox-input">
             <FaSearch className='inbox-icon' />
             <input type="text" placeholder='Search for contacts' />
@@ -30,7 +30,7 @@ const Inbox = () => {
 
           {/* Message input area without animation */}
           <div className="inbox-upload-container">
-            <FiUpload className='inbox-upload-icon' />
+            <FiUpload  size={24}  className='inbox-upload-icon' />
             <input type="text" placeholder='Write Message' className='inbox-upload-input' />
             <button type="submit" className="inbox-button">
               <FaPaperPlane />

@@ -109,7 +109,7 @@ const Projects = () => {
             <input type="text" name="category" value={newProject.category} onChange={changeHandler} placeholder="Category" required />
             <textarea name="description" value={newProject.description} onChange={changeHandler} placeholder="Description" required />
             <input type="number" name="members" value={newProject.members} onChange={changeHandler} placeholder="Members" required min="1" />
-            <input type="text" name="dueDate" value={newProject.dueDate} onChange={changeHandler} placeholder="Due Date (e.g. June 10, 2025)" required />
+            <input type="date" name="dueDate" value={newProject.dueDate} onChange={changeHandler} placeholder="Due Date (e.g. June 10, 2025)" required />
             <input type="text" name="technologies" value={techInput} onChange={(e) => setTechInput(e.target.value)} placeholder="Technologies (comma separated)" />
             <button type="submit" className='submit-project'>Submit Project</button>
           </form>

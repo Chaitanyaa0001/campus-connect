@@ -54,8 +54,8 @@ const Discussion = () => {
           </div>
 
           <form onSubmit={SubmitHandler} className="chat-input">
-            <FiUpload className='Ficon' />
-            <div style={{ flexGrow: 1 }}>
+            <FiUpload size={24} className='Ficon' />
+            
               <input
                 type="text"
                 placeholder="Type a message..."
@@ -64,9 +64,9 @@ const Discussion = () => {
                 onChange={changeHandler}
                 className="chat-textbox"
               />
-            </div>
+         
             <button type="submit" className="send-btn">
-              <FaPaperPlane />
+              <FaPaperPlane size={24} />
             </button>
           </form>
         </div>

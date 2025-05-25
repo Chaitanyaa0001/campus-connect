@@ -5,7 +5,6 @@
 }
 a{
     text-decoration: none;
-    
 }
 body {
 
@@ -14,7 +13,6 @@ body {
     background-size: cover;
     color: white;
 }
-
 #signup{
     background-color:black;
     height: 110vh;
@@ -31,7 +29,6 @@ body {
     display: flex;
     background-color: black;
 }
-
 
 #getstarted{
     height: 100vh;
