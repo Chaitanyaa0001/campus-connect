@@ -80,6 +80,8 @@ const Carental = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    
     const id = Date.now();
     setCars(prev => [
       ...prev,
