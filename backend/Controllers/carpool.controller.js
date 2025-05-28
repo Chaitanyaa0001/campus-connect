@@ -13,8 +13,6 @@ const postcarpool = async(req,res) =>{
     try {
         // const user = req.user;
 
-        console.log("POST /api/carpool hit");
-        console.log("Request body:", req.body);
         const {from,to,time,seatsAvailable,price} = req.body;
 
         if (!from|| !to || !time || !seatsAvailable || !price ){

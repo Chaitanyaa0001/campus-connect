@@ -1,6 +1,6 @@
 const CarRental = require('../models/carRental.model');
 
-// ✅ GET all car rentals
+
 const getallcars = async (req, res) => {
     try {
         const carrentals = await CarRental.find(); // Added await
@@ -11,8 +11,10 @@ const getallcars = async (req, res) => {
     }
 };
 
-// ✅ POST new car rental
+
 const postcarrental = async (req, res) => {
+    console.log("Request body:", req.body);
+    console.log("Uploaded file:", req.file);
     try {
         const {
             VechicleModel,
@@ -21,8 +23,11 @@ const postcarrental = async (req, res) => {
             VechileMileage,
             VechicleDescription,
             Available,
-            Choosefile
         } = req.body;
+
+
+        const Choosefile = req.file?.path 
+        
 
         if (
             !VechicleModel ||
@@ -53,7 +58,7 @@ const postcarrental = async (req, res) => {
     }
 };
 
-// ✅ DELETE car rental by ID
+
 const deletecarrental = async (req, res) => {
     try {
         const { id } = req.params;

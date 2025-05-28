@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
-const Projects = require('./project.model')
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
     username:{
         type:String,
         required:true
@@ -17,8 +16,9 @@ const userSchema = mongoose.Schema({
         required:true
     },
     profilephoto:{
-        type : String ,
-        required:true
+        type : String,
+        required:true,
+        default: '/user.jpg'
     },
     carpools:{
         type:[mongoose.Schema.Types.ObjectId],

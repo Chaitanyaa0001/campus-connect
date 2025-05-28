@@ -12,7 +12,7 @@ const carRentalschema = new mongoose.Schema({
     },
     RentalPeriod:{
         type:String,
-        required
+        required:true
     },
     VechileMileage:{
         type:String,
@@ -26,7 +26,7 @@ const carRentalschema = new mongoose.Schema({
         type:Boolean,
         default:true
     },
-    ChooseFile:{
+    Choosefile:{
         type:String,
         required: true
     }
@@ -35,6 +35,6 @@ const carRentalschema = new mongoose.Schema({
     timestamps : true
 });
 
-const CarRental = mongoose.model('carpool',carRentalschema);
+const CarRental = mongoose.model('CarRental',carRentalschema);
 module.exports = CarRental;
 
