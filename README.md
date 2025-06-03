@@ -1,7 +1,8 @@
+>  **Note:** This project is currently a **Work in Progress (WIP)** and under active development.
+
 # 🎓 Campus Connect
 
 **Campus Connect** is a dynamic, full-stack MERN web application designed to enhance communication, collaboration, and everyday utility within a campus environment. It offers real-time chat, resource-sharing, lost & found functionality, car pooling/renting, and a student project collaboration space—all under one unified platform.
-
 ---
 
 ## 🛠️ Tech Stack
