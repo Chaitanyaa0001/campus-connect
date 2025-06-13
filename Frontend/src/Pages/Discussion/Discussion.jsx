@@ -3,6 +3,7 @@ import Sidebar from '../../Components/Sidebar/Sidebar';
 import './Discussion.css';
 import { FiUpload } from 'react-icons/fi';
 import { FaPaperPlane } from 'react-icons/fa';
+import {io} from 'socket.io-client';
 
 const Discussion = () => {
   const [messages, setMessages] = useState([

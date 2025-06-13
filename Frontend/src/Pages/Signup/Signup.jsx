@@ -28,7 +28,7 @@ const Signup = () => {
       const response = await axios.post(`http://localhost:4000/api/auth/register`, signupData, { withCredentials: true });
 
       if (response.status === 201) {
-        navigate('/discussion');
+        navigate('/login');
       }
 
       setSignupData({
@@ -39,7 +39,8 @@ const Signup = () => {
       })
     }
     catch (err) {
-      console.error(err.message);
+      console.error("Error response:", err.response?.data || err.message);
+       alert(err.response?.data?.message || "Signup failed");
     }
   }
 

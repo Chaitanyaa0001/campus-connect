@@ -10,14 +10,14 @@ const carpoolSchema = new mongoose.Schema({
         required: true
     },
     time:{
-        type: String,
+        type: Number,
         required: true
     },
     seatsAvailable:{
         type: Number,
         required: true
     },
-    price:{
+    pricePerSeat:{
         type: Number,
         required:true
     }

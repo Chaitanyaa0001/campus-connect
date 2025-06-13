@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { loginSuccess} from '../../ReduxFeatures/auth/auth.slice';
 
 const Login = () => {
+
+  const navigate = useNavigate();
+  const dispatch =  useDispatch();
   const [logindata, setlogindata] = useState({
     email: '',
     password: ''
@@ -14,17 +20,32 @@ const Login = () => {
       ...prev,
       [name]: value
     }));
-  };
+  }; 
 
-  const SubmitHandler = (e) => {
-    e.preventDefault();
-    console.log(logindata); // Optional: Check your data
 
-    // Clear form
-    setlogindata({
-      email: '',
-      password: ''
-    });
+  const SubmitHandler =  async (e) => {
+    try {
+        e.preventDefault();
+
+        const response = await axios.post(`http://localhost:4000/api/auth/login`,
+          logindata,
+          {withCredentials:true}
+        )
+        if (response.status === 200){
+          dispatch(loginSuccess(response.data))
+          navigate('/discussion')
+
+        }
+       // Clear form
+        setlogindata({
+          email: '',
+          password: ''
+      });
+      
+    } catch (error) {
+      console.error("Error response:", error.response?.data || error.message);
+      alert(error.response?.data?.message || "Signup failed");
+    }
   };
 
   return (

@@ -11,11 +11,11 @@ const getAllCarpools = async (req, res) => {
 
 const postcarpool = async(req,res) =>{
     try {
-        // const user = req.user;
+        const user = req.user;
 
-        const {from,to,time,seatsAvailable,price} = req.body;
+        const {from,to,time,seatsAvailable,pricePerSeat} = req.body;
 
-        if (!from|| !to || !time || !seatsAvailable || !price ){
+        if (!from|| !to || !time || !seatsAvailable || !pricePerSeat ){
             return res.status(400).json({message: "all fields are required"})
         }
         const carpool = await Carpool.create({
@@ -23,15 +23,15 @@ const postcarpool = async(req,res) =>{
             to,
             time,
             seatsAvailable,
-            price
-            // user: user._id
+            pricePerSeat,
+            user: user._id
         });
-        return res.status(201).json({message: "Carpool created successfully"});
+      
 
 
-        // user.carpools.push(carpool._id);
-        // await user.save();
-        // return res.status(201).json(carpool);
+        user.carpools.push(carpool._id);
+        await user.save();
+        return res.status(201).json(carpool);
 
     } catch (error) {
         console.error("Post Carpool Error:", error.message);
@@ -40,10 +40,10 @@ const postcarpool = async(req,res) =>{
 }
 
 const deletecarpool = async (req,res)=>{
-    // const user = req.user;
+    const user = req.user;
     try {
         const{id}= req.params;
-        const deleted = await  Carpool.findByIdAndDelete(id);
+        const deleted = await Carpool.findOneAndDelete({ _id: id, user: user._id });
 
         if(!deleted) {
             return res.status(404).json({message:"No carpool Found "})
