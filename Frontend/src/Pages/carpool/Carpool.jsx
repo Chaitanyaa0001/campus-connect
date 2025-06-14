@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import './Carpool.css';
 import { FaUsers, FaSearch, FaMapMarkerAlt, FaClock } from "react-icons/fa";
@@ -60,7 +60,7 @@ const Carpool = () => {
   }) || [];
 
 
-  if (!carpools) return <h1>Loading</h1>
+  if (!carpools) return <h1 style={{ backgroundColor: 'black', width: '100vw', height: '100vh', textAlign: 'center', paddingTop: '50vh' }}>Loading</h1>
 
 
   return (

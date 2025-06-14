@@ -1,52 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Carental.css';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import { FaCar } from "react-icons/fa";
 import { motion } from 'framer-motion'; // ✅ Import Framer Motion
-
+import { useCarRental } from '../../hooks/carrentalhooks/usecarrentalhook';
+import { useAddcarrental } from '../../hooks/carrentalhooks/useaddcarrental';
 const Carental = () => {
-  const [cars, setCars] = useState([
-    {
-      id: 1,
-      name: "Toyota Corolla",
-      rentalAmount: "₹2500/day",
-      rentalPeriod: "3 days",
-      mileage: "18 km/l",
-      description: "A comfortable and fuel-efficient sedan with automatic transmission and spacious seating.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfwwQU1H_ySuQXx7lqdv3eCXJ15A3AxDViaA&s",
-      available: true,
-    },
-    {
-      id: 2,
-      name: "Hyundai Creta",
-      rentalAmount: "₹3000/day",
-      rentalPeriod: "1 week",
-      mileage: "16 km/l",
-      description: "Stylish SUV with excellent ground clearance, touchscreen infotainment, and powerful AC.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfwwQU1H_ySuQXx7lqdv3eCXJ15A3AxDViaA&s",
-      available: true,
-    },
-    {
-      id: 3,
-      name: "Maruti Swift",
-      rentalAmount: "₹1800/day",
-      rentalPeriod: "2 days",
-      mileage: "22 km/l",
-      description: "Compact hatchback ideal for city rides. Manual transmission and high mileage.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfwwQU1H_ySuQXx7lqdv3eCXJ15A3AxDViaA&s",
-      available: true,
-    },
-    {
-      id: 4,
-      name: "Mahindra Thar",
-      rentalAmount: "₹4000/day",
-      rentalPeriod: "1 weekend",
-      mileage: "15 km/l",
-      description: "Rugged off-road SUV with convertible top, 4x4 drive, and strong road presence.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfwwQU1H_ySuQXx7lqdv3eCXJ15A3AxDViaA&s",
-      available: true,
-    }
-  ]);
+  const {carrental,getallcarrentals} = useCarRental();
+  const {createcarrental} = useAddcarrental();
+
+
+  useEffect(()=>{
+    getallcarrentals()
+  });
+
 
   const [showForm, setShowForm] = useState(false);
   const [newCar, setNewCar] = useState({
@@ -81,16 +48,9 @@ const Carental = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+
     
     const id = Date.now();
-    setCars(prev => [
-      ...prev,
-      {
-        ...newCar,
-        id,
-        image: imagePreview || 'https://cdn.pixabay.com/photo/2012/04/12/23/47/car-30984_1280.png',
-      }
-    ]);
     setShowForm(false);
     setNewCar({
       name: '',
@@ -152,8 +112,9 @@ const Carental = () => {
         )}
 
         <div className="car-rental-cards">
-          {cars.map((car) => (
-            <div className={`car-card ${!car.available ? 'disabled-card' : ''}`} key={car.id}>
+          {carrental.map(car => {
+            return(
+              <div className={`car-card ${!car.available ? 'disabled-card' : ''}`} key={car._id}>
               <div className="card-img">
                 <img
                   src={car.image && car.image !== 'carImage'
@@ -175,7 +136,8 @@ const Carental = () => {
               </div>
               <span className="contact-owner">Contact Owner</span>
             </div>
-          ))}
+            )
+          })}
         </div>
       </motion.div>
     </div>
