@@ -13,9 +13,10 @@ const getallcars = async (req, res) => {
 
 
 const postcarrental = async (req, res) => {
-    console.log("Request body:", req.body);
-    console.log("Uploaded file:", req.file);
+
     try {
+        const user = req.user;
+
         const {
             VechicleModel,
             RentalAmount,
@@ -51,7 +52,10 @@ const postcarrental = async (req, res) => {
             Choosefile
         });
 
-        return res.status(201).json({ message: "Car rental card created", carrental });
+        user.carrentals.push(carrental._id);
+        await user.save();
+        return res.status(201).json(carrental);
+
     } catch (error) {
         console.error("Internal server error:", error.message);
         return res.status(500).json({ message: "Internal Server Error" });
@@ -61,8 +65,10 @@ const postcarrental = async (req, res) => {
 
 const deletecarrental = async (req, res) => {
     try {
+            const user = req.user;
+
         const { id } = req.params;
-        const deletedcarrental = await CarRental.findByIdAndDelete(id);
+        const deletedcarrental = await CarRental.findByIdAndDelete({ _id: id,user: user._id});
 
         if (!deletedcarrental) {
             return res.status(404).json({ message: "No CarRental found" });
