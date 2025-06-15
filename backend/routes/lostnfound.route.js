@@ -4,10 +4,10 @@ const router = express.Router();
 const { getalllostnfound, postlostnfound, DeleteLostnfound } = require("../Controllers/lostnfound.controller");
 const getCloudinaryUploader = require("../middlewares/cloudinary.multer");
 const upload = getCloudinaryUploader("lost_and_found");
+const checkauth = require("../middlewares/auth.middleware")
 
-
-router.get('/', getalllostnfound);
-router.post("/",  upload.single("choosefile"), postlostnfound);
-router.delete('/:id', DeleteLostnfound);
+router.get('/', checkauth , getalllostnfound);
+router.post("/",checkauth , upload.single("choosefile"), postlostnfound);
+router.delete('/:id',checkauth, DeleteLostnfound);
 
 module.exports = router;

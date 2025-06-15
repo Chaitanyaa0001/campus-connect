@@ -40,8 +40,9 @@ const postcarpool = async(req,res) =>{
 }
 
 const deletecarpool = async (req,res)=>{
-    const user = req.user;
+    
     try {
+          const user = req.user;
         const{id}= req.params;
         const deleted = await Carpool.findOneAndDelete({ _id: id, user: user._id });
 

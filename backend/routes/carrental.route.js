@@ -3,12 +3,13 @@ const router =  express.Router();
 const {getallcars,postcarrental,deletecarrental}= require("../Controllers/carrental.controller");
 const getCloudinaryUploader = require("../middlewares/cloudinary.multer");
 const uploadCarPhoto = getCloudinaryUploader("car_rental");
+const checkauth = require("../middlewares/auth.middleware")
 
 
 
 
-router.get('/',getallcars);
-router.post("/", uploadCarPhoto.single("Choosefile"), postcarrental); 
+router.get('/',checkauth,getallcars);
+router.post("/", checkauth, uploadCarPhoto.single("Choosefile"), postcarrental); 
 
 
 router.delete('/:id',deletecarrental);
