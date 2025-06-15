@@ -33,6 +33,8 @@ const Login = () => {
         )
         if (response.status === 200){
           dispatch(loginSuccess(response.data))
+          console.log("kogin dispatched ",response.data);
+          
           navigate('/discussion')
 
         }

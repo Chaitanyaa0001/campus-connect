@@ -4,27 +4,26 @@ import Sidebar from '../../Components/Sidebar/Sidebar';
 import { FaCar } from "react-icons/fa";
 import { motion } from 'framer-motion'; // ✅ Import Framer Motion
 import { useCarRental } from '../../hooks/carrentalhooks/usecarrentalhook';
-import { useAddcarrental } from '../../hooks/carrentalhooks/useaddcarrental';
+import {useAddcarrental} from '../../hooks/carrentalhooks/useaddcarrental'
+
+
+
 const Carental = () => {
   const {carrental,getallcarrentals} = useCarRental();
   const {createcarrental} = useAddcarrental();
 
 
-  useEffect(()=>{
-    getallcarrentals()
-  });
-
-
   const [showForm, setShowForm] = useState(false);
   const [newCar, setNewCar] = useState({
-    name: '',
-    rentalAmount: '',
-    rentalPeriod: '',
-    mileage: '',
-    description: '',
-    image: 'carImage',
-    available: true
-  });
+  VechicleModel: '',
+  RentalAmount: '',
+  RentalPeriod: '',
+  VechileMileage: '',
+  VechicleDescription: '',
+  Choosefile: 'carImage', // optional default
+  Available: true
+});
+
 
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -45,25 +44,35 @@ const Carental = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =  async(e) => {
     e.preventDefault();
+    try {
+      await createcarrental(newCar,imageFile)
+      getallcarrentals()
+      
+    } catch (error) {
+      console.error("carrental  submition failed !!");      
+    }
 
 
     
     const id = Date.now();
     setShowForm(false);
-    setNewCar({
-      name: '',
-      rentalAmount: '',
-      rentalPeriod: '',
-      mileage: '',
-      description: '',
-      image: 'carImage',
-      available: true
+   setNewCar({
+      VechicleModel: '',
+      RentalAmount: '',
+      RentalPeriod: '',
+      VechileMileage: '',
+      VechicleDescription: '',
+      Choosefile: 'carImage',
+      Available: true
     });
+
     setImageFile(null);
     setImagePreview(null);
   };
+
+  if(!carrental) return <h1>loading</h1>
 
   return (
     <div className='component-container'>
@@ -86,14 +95,15 @@ const Carental = () => {
         {showForm && (
           <form className='add-car-form' onSubmit={handleSubmit}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
-              <input type="text" name="name" placeholder="Vehicle Model" value={newCar.name} onChange={handleChange} required />
-              <input type="text" name="rentalAmount" placeholder="Rental Amount" value={newCar.rentalAmount} onChange={handleChange} required />
-              <input type="text" name="rentalPeriod" placeholder="Rental Period" value={newCar.rentalPeriod} onChange={handleChange} required />
-              <input type="text" name="mileage" placeholder="Vehicle Mileage" value={newCar.mileage} onChange={handleChange} required />
-              <textarea name="description" placeholder="Vehicle Description" value={newCar.description} onChange={handleChange} required></textarea>
+              <input type="text" name="VechicleModel" placeholder="Vehicle Model" value={newCar.VechicleModel} onChange={handleChange} required />
+              <input type="text" name="RentalAmount" placeholder="Rental Amount" value={newCar.RentalAmount} onChange={handleChange} required />
+              <input type="text" name="RentalPeriod" placeholder="Rental Period" value={newCar.RentalPeriod} onChange={handleChange} required />
+              <input type="text" name="VechileMileage" placeholder="Vehicle Mileage" value={newCar.VechileMileage} onChange={handleChange} required />
+              <textarea name="VechicleDescription" placeholder="Vehicle Description" value={newCar.VechicleDescription} onChange={handleChange} required></textarea>
+
 
               <label>
-                <input type="checkbox" className='form-available' name="available" checked={newCar.available} onChange={handleChange} />
+                <input type="checkbox" className='form-available' name="Available" checked={newCar.Available} onChange={handleChange} />
                 Available
               </label>
             </div>
@@ -117,21 +127,18 @@ const Carental = () => {
               <div className={`car-card ${!car.available ? 'disabled-card' : ''}`} key={car._id}>
               <div className="card-img">
                 <img
-                  src={car.image && car.image !== 'carImage'
-                    ? car.image
-                    : 'https://cdn.pixabay.com/photo/2012/04/12/23/47/car-30984_1280.png'}
-                  alt={car.name}
+                  src= {car.Choosefile}  alt={car.VechicleModel}
                 />
               </div>
               <div className="car-rental-details">
                 <div className="name">
-                  <h2>{car.name}</h2>
-                  <span className="amount">{car.rentalAmount}</span>
+                  <h2>{car.VechicleModel}</h2>
+                  <span className="amount">{car.RentalAmount}</span>
                 </div>
-                <p className="car-description">{car.description}</p>
+                <p className="car-description">{car.VechicleDescription}</p>
                 <div className="available">
-                  <p>Amount:<span> {car.rentalPeriod}</span></p>
-                  <p>Milage:<span>{car.mileage}</span></p>
+                  <p>Amount:<span> {car.RentalPeriod}</span></p>
+                  <p>Milage:<span>{car.VechileMileage}</span></p>
                 </div>
               </div>
               <span className="contact-owner">Contact Owner</span>

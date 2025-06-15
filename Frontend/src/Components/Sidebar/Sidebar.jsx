@@ -12,9 +12,10 @@ import {
 import './Sidebar.css';
 import logo from "../../assets/Profile.jpg";
 import { NavLink,Link} from 'react-router-dom'; 
+import { useLogout } from "../../hooks/logouthooks/logouthook";
 
 const Sidebar = () => {
-
+  const logout = useLogout()
   const [isOpen, setisOpen] = useState(true);
 
   const navbarToggle = () => {
@@ -56,7 +57,7 @@ const Sidebar = () => {
       </div>
 
       <div className="bottom-menu">
-        <div className="menu-item"><FaSignOutAlt size ={25} /> {isOpen && 'Logout'}</div>
+        <div className="menu-item" onClick={logout}>  <FaSignOutAlt size ={25} /> {isOpen && 'Logout'}</div>
       </div>
     </aside>
 
