@@ -57,7 +57,7 @@ const Sidebar = () => {
       </div>
 
       <div className="bottom-menu">
-        <div className="menu-item" onClick={logout}>  <FaSignOutAlt size ={25} /> {isOpen && 'Logout'}</div>
+        <button className="menu-item" onClick={logout}>  <FaSignOutAlt size ={25} /> {isOpen && 'Logout'}</button>
       </div>
     </aside>
 

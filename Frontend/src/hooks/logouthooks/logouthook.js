@@ -15,9 +15,9 @@ export const useLogout = () => {
         withCredentials: true,
       });
 
-      dispatch(logoutAction()); // clear user state
+      dispatch(logoutAction()); 
       await persistor.purge();
-      navigate("/login");        // redirect to login
+      navigate("/login");        
     } catch (error) {
       console.error("Logout failed:", error.response?.data || error.message);
     }

@@ -108,11 +108,21 @@
     display: flex;
     justify-content: flex-end;
     flex-direction: column;
+
     margin-bottom: 1em
 }
 
 .bottom-menu button {
     display: flex;
     align-items: center;
-    gap: 1em
+    gap: 1em;
+    padding: 0.5em;
+    background-color: transparent;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+}
+.bottom-menu button:hover{
+    background-color:#322f2f ;
 }

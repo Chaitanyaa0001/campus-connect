@@ -48,7 +48,22 @@ const Carental = () => {
     e.preventDefault();
     try {
       await createcarrental(newCar,imageFile)
-      getallcarrentals()
+      getallcarrentals();
+
+          const id = Date.now();
+    setShowForm(false);
+   setNewCar({
+      VechicleModel: '',
+      RentalAmount: '',
+      RentalPeriod: '',
+      VechileMileage: '',
+      VechicleDescription: '',
+      Choosefile: 'carImage',
+      Available: true
+    });
+
+    setImageFile(null);
+    setImagePreview(null);
       
     } catch (error) {
       console.error("carrental  submition failed !!");      
