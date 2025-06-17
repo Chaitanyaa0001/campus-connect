@@ -34,7 +34,7 @@ const postcarpool = async(req,res) =>{
         return res.status(201).json(carpool);
 
     } catch (error) {
-        console.error("Post Carpool Error:", error.message);
+        console.error("Post Carpool Error:", error);
         return res.status(500).json({ message: "Internal Server Error" });
     }
 }

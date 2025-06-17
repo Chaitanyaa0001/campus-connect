@@ -49,7 +49,8 @@ const postcarrental = async (req, res) => {
             VechileMileage,
             VechicleDescription,
             Available,
-            Choosefile
+            Choosefile,
+            user: req.user._id
         });
 
         user.carrentals.push(carrental._id);

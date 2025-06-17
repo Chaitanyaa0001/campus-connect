@@ -14,6 +14,9 @@ const getallprojects = async (req, res) => {
 // POST a new project
 const postproject = async (req, res) => {
   try {
+
+    const user = req.user;
+
     const {
       projectTitle,
       Category,
@@ -28,6 +31,7 @@ const postproject = async (req, res) => {
     }
 
     const newProject = await Projects.create({
+      user: user._id,
       projectTitle,
       Category,
       Description,
@@ -36,7 +40,10 @@ const postproject = async (req, res) => {
       Technologies
     });
 
-    return res.status(201).json({ message: "Project card created", project: newProject });
+    user.projects.push(newProject._id);
+    await user.save();
+    return res.status(201).json(newProject);
+
   } catch (error) {
     console.error("Project creation error:", error);
     return res.status(500).json({ message: "Internal Server Error" });
@@ -46,8 +53,9 @@ const postproject = async (req, res) => {
 // DELETE a project by ID
 const deleteProject = async (req, res) => {
   try {
+    const user = req.user;
     const { id } = req.params;
-    const deleted = await Projects.findByIdAndDelete(id);
+    const deleted = await Projects.findByIdAndDelete({ _id: id, user: user._id });
 
     if (!deleted) {
       return res.status(404).json({ message: "Project card not found" });
