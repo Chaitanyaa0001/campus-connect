@@ -184,3 +184,43 @@ input.form-available {
   font-size: 1rem;
   padding: 1em 0.8em;
 }
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #0f0f0f; /* Dark background for contrast */
+  color: #00bcd4; /* Neon cyan/blue tone */
+  padding: 0 1rem;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.loader {
+  width: 12vw;
+  height: 12vw;
+  max-width: 64px;
+  max-height: 64px;
+  min-width: 32px;
+  min-height: 32px;
+  border: 6px solid rgba(255, 255, 255, 0.1);
+  border-top: 6px solid #00bcd4; /* Blue highlight matching your theme */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loader-container p {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  letter-spacing: 0.5px;
+  color: #cce7f0;
+}
+

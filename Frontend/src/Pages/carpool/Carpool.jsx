@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import './Carpool.css';
+
 import { FaUsers, FaSearch, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 import { MdLocationOn, MdAirlineSeatReclineNormal } from 'react-icons/md';
 import { motion } from 'framer-motion'; // ✅ Import Framer Motion
@@ -60,7 +61,14 @@ const Carpool = () => {
   }) || [];
 
 
-  if (!carpools) return <h1 style={{ backgroundColor: 'black', width: '100vw', height: '100vh', textAlign: 'center', paddingTop: '50vh' }}>Loading</h1>
+    if (!carpools) {
+      return (
+        <div className="loader-container">
+          <div className="loader"></div>
+          <p>Loading carpool rides...</p>
+        </div>
+      );
+    }
 
 
   return (

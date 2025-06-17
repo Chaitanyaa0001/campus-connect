@@ -9,9 +9,12 @@ export const useAddcarrental = () => {
     try {
       const formdata = new FormData();
 
-      for (let key in carrental) {
-        formdata.append(key, carrental[key]);
-      }
+      formdata.append("VechicleModel", carrental.VechicleModel);
+      formdata.append("RentalAmount", carrental.RentalAmount);
+      formdata.append("RentalPeriod", carrental.RentalPeriod);
+      formdata.append("VechileMileage", carrental.VechileMileage);
+      formdata.append("VechicleDescription", carrental.VechicleDescription);
+      formdata.append("Available", carrental.Available); // boolean preserved
 
       if (imagefile) {
         formdata.append("Choosefile", imagefile); // 👈 change key if backend expects 'image' instead

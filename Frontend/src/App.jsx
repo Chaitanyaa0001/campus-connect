@@ -12,8 +12,7 @@ import Projects from './Pages/Projects/Projects';
 import GetStarted from './Pages/GetStarted/GetStarted';
 import User from './Pages/userpage/User';
 import ProtectedRoute from './Components/protectedroute/protectedroute';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+
 
 
 
@@ -21,11 +20,6 @@ import { useSelector } from 'react-redux';
 
 const App = () => {
 
-  const authState = useSelector(state => state.auth);
-
-   useEffect(() => {
-    console.log('Auth State on Load:', authState);
-  }, [authState]);
 
   return (
 

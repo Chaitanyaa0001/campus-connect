@@ -48,19 +48,19 @@ const Carental = () => {
     e.preventDefault();
     try {
       await createcarrental(newCar,imageFile)
-      getallcarrentals();
+      await getallcarrentals();
 
-          const id = Date.now();
+    const id = Date.now();
     setShowForm(false);
-   setNewCar({
+    setNewCar({
       VechicleModel: '',
       RentalAmount: '',
       RentalPeriod: '',
       VechileMileage: '',
       VechicleDescription: '',
-      Choosefile: 'carImage',
-      Available: true
-    });
+      Choosefile: '',
+      Available: true 
+     });
 
     setImageFile(null);
     setImagePreview(null);
@@ -68,26 +68,21 @@ const Carental = () => {
     } catch (error) {
       console.error("carrental  submition failed !!");      
     }
-
-
-    
-    const id = Date.now();
-    setShowForm(false);
-   setNewCar({
-      VechicleModel: '',
-      RentalAmount: '',
-      RentalPeriod: '',
-      VechileMileage: '',
-      VechicleDescription: '',
-      Choosefile: 'carImage',
-      Available: true
-    });
-
-    setImageFile(null);
-    setImagePreview(null);
   };
+      if (!carrental) {
+        return (
+          <div className="loader-container">
+            <motion.div
+              className="loader"
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+            />
+            <p>Loading Car Rentals...</p>
+          </div>
+        );
+      }
 
-  if(!carrental) return <h1>loading</h1>
+
 
   return (
     <div className='component-container'>

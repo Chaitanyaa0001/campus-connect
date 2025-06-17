@@ -39,37 +39,39 @@ const LostnFound = () => {
     }
   };
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
+ const submitHandler = async (e) => {
+  e.preventDefault();
 
-    try {
-      await createlostnfound(newlnf, imagefile);
-      
-      setNewlnf({
-        itemName: "",
-        itemDescription: "",
-        itemStatus: "Lost",
-        choosefile: "",
-      });
-      setImagefile(null);
-      await getallLostnfound();
-      setShowForm(false);
+  try {
+    await createlostnfound(newlnf, imagefile);
+    setNewlnf({
+      itemName: "",
+      itemDescription: "",
+      choosefile: "",
+    });
+    setImagefile(null);
+    getallLostnfound();
+    setShowForm(false);
+  } catch (err) {
+    console.error("Submission failed", err);
+  }
+};
 
-    } catch (err) {
-      console.error("Submission failed", err);
-    }
-  };
 
   if (!lostAndFound) {
-    return (
-      <div className="component-container">
-        <Sidebar />
-        <p style={{ padding: "1rem" }}>Loading lost and found data...</p>
-      </div>
-    );
+      return (
+        <div className="loader-container">
+          <motion.div
+            className="loader"
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          />
+          <p>Loading Car Rentals...</p>
+       </div>  
+      );
   }
 
-  const filteredlostnfound = lostAndFound.filter((item) => {
+  const filteredlostnfound = lostAndFound?.filter((item) => {
     const query = searchquery.toLowerCase();
     const matchesQuery =
       item.itemName?.toLowerCase().includes(query) ||
@@ -79,7 +81,7 @@ const LostnFound = () => {
       statusFilter === "" ||
       item.itemStatus === statusFilter;
     return matchesQuery && matchesStatus;
-  });
+  }) || [];
 
 
   return (

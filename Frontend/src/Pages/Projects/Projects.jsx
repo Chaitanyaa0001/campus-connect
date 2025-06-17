@@ -3,53 +3,24 @@ import Sidebar from '../../Components/Sidebar/Sidebar';
 import './Projects.css';
 import { FaSearch, FaPlusCircle, FaCalendarAlt, FaUsers } from "react-icons/fa";
 import { motion } from 'framer-motion';
+import { useprojects } from '../../hooks/projectshooks/useprojectshooks';
+import { useaddprojects } from '../../hooks/projectshooks/useaddprojects';
 
 const Projects = () => {
   const [searchquery, setsearchquery] = useState("");
-
-  const [projects, setProjects] = useState([
-    {
-      title: "Campus Navigation App",
-      category: "Mobile Development",
-      description: "Creating a mobile app to help navigate the campus buildings and find the shortest routes between classes.",
-      members: 5,
-      dueDate: "May 15, 2025",
-      progress: 65,
-      status: "Active",
-      technologies: ["React Native", "Maps API"]
-    },
-    {
-      title: "Student Wellness Survey",
-      category: "Research",
-      description: "Conducting research on student wellness and mental health to inform campus services.",
-      members: 3,
-      dueDate: "April 30, 2025",
-      progress: 40,
-      status: "Active",
-      technologies: ["Research", "Mobile Development"]
-    },
-    {
-      title: "Campus Sustainability Initiative",
-      category: "Environmental",
-      description: "Developing a plan to reduce waste and increase sustainability practices across campus.",
-      members: 8,
-      dueDate: "June 10, 2025",
-      progress: 55,
-      status: "Active",
-      technologies: ["Data Analyst"]
-    }
-  ]);
+  const { projects, setprojects, getallprojects } = useprojects();
+  const { createproject } = useaddprojects();
 
   const [showForm, setShowForm] = useState(false);
   const [newProject, setNewProject] = useState({
-    title: "",
-    category: "",
-    description: "",
-    members: 0,
+    projectTitle: "",
+    Category: "",
+    Description: "",
+    personrequired: 0,
     dueDate: "",
-    status: "Active",
-    technologies: []
+    Technologies: []
   });
+
   const [techInput, setTechInput] = useState("");
 
   const changeHandler = (e) => {
@@ -57,36 +28,49 @@ const Projects = () => {
     setNewProject(prev => ({ ...prev, [name]: value }));
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     const techArray = techInput.split(',').map(tech => tech.trim());
-    setProjects(prev => [...prev, { ...newProject, technologies: techArray }]);
+    const finalProject = { ...newProject, Technologies: techArray };
+
+    await createproject(finalProject);
+    await getallprojects();
+
     setNewProject({
-      title: "",
-      category: "",
-      description: "",
-      members: 0,
+      projectTitle: "",
+      Category: "",
+      Description: "",
+      personrequired: 0,
       dueDate: "",
-      status: "Active",
-      technologies: []
+      Technologies: []
     });
     setTechInput("");
     setShowForm(false);
   };
 
-  const filteredProjects = projects.filter(project => {
-    const query = searchquery.toLowerCase();
-    return (
-      project.title?.toLowerCase().includes(query) ||
-      project.description?.toLowerCase().includes(query) ||
-      project.category?.toLowerCase().includes(query)
-    );
-  });
+  if (!projects) {
+  return (
+    <div className="loader-container">
+      <div className="loader"></div>
+      <p>Loading projects...</p>
+    </div>
+  );
+}
+
+    const filteredProjects =  projects?.filter(project => {
+      if(!project) return false;
+         const query = searchquery.toLowerCase();
+         return (
+           project.projectTitle?.toLowerCase().includes(query) ||
+           project.Description?.toLowerCase().includes(query) ||
+           project.Category?.toLowerCase().includes(query)
+         );
+       }) || [];
+
 
   return (
     <div className='component-container'>
       <Sidebar />
-
       <motion.div
         id="projects"
         initial={{ opacity: 0, y: 30 }}
@@ -105,13 +89,53 @@ const Projects = () => {
 
         {showForm && (
           <form className="add-project-form" onSubmit={submitHandler}>
-            <input type="text" name="title" value={newProject.title} onChange={changeHandler} placeholder="Project Title" required />
-            <input type="text" name="category" value={newProject.category} onChange={changeHandler} placeholder="Category" required />
-            <textarea name="description" value={newProject.description} onChange={changeHandler} placeholder="Description" required />
-            <input type="number" name="members" value={newProject.members} onChange={changeHandler} placeholder="Members" required min="1" />
-            <input type="date" name="dueDate" value={newProject.dueDate} onChange={changeHandler} placeholder="Due Date (e.g. June 10, 2025)" required />
-            <input type="text" name="technologies" value={techInput} onChange={(e) => setTechInput(e.target.value)} placeholder="Technologies (comma separated)" />
-            <button type="submit" className='submit-project'>Submit Project</button>
+            <input
+              type="text"
+              name="projectTitle"
+              value={newProject.projectTitle}
+              onChange={changeHandler}
+              placeholder="Project Title"
+              required
+            />
+            <input
+              type="text"
+              name="Category"
+              value={newProject.Category}
+              onChange={changeHandler}
+              placeholder="Category"
+              required
+            />
+            <textarea
+              name="Description"
+              value={newProject.Description}
+              onChange={changeHandler}
+              placeholder="Description"
+              required
+            />
+            <input
+              type="number"
+              name="personrequired"
+              value={newProject.personrequired}
+              onChange={changeHandler}
+              placeholder="Members"
+              required
+              min="1"
+            />
+            <input
+              type="date"
+              name="dueDate"
+              value={newProject.dueDate}
+              onChange={changeHandler}
+              required
+            />
+            <input
+              type="text"
+              name="Technologies"
+              value={techInput}
+              onChange={(e) => setTechInput(e.target.value)}
+              placeholder="Technologies (comma separated)"
+            />
+            <button type="submit" className="submit-project">Submit Project</button>
           </form>
         )}
 
@@ -131,22 +155,23 @@ const Projects = () => {
           {filteredProjects.map((project, index) => (
             <div className="project-card" key={index}>
               <div className="project-header">
-                <h2>{project.title}</h2>
+                <h2>{project.projectTitle}</h2>
               </div>
 
-              <p className='category'>{project.category}</p>
+              <p className='category'>{project.Category}</p>
 
               <div className="project-details">
-                <p className='description'>{project.description}</p>
+                <p className='description'>{project.Description}</p>
                 <div className="pro-date">
-                  <p><FaUsers /> {project.members}</p>
+                  <p><FaUsers /> {project.personrequired}</p>
                   <p><FaCalendarAlt /> {project.dueDate}</p>
                 </div>
 
                 <div className="technology">
-                  {project.technologies.map((tech, i) => (
-                    <span className='tech' key={`${index}-${i}`}>{tech}</span>
-                  ))}
+                  {Array.isArray(project.Technologies) &&
+                    project.Technologies.map((tech, i) => (
+                      <span className='tech' key={`${index}-${i}`}>{tech}</span>
+                    ))}
                 </div>
               </div>
 

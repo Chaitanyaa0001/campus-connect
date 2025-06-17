@@ -1,22 +1,21 @@
-// src/hooks/carpoolhooks/useaddcarpool.js
 import { useState } from "react";
 import axios from "axios";
 
 export const useAddCarpool = () => {
   const [carpoolData, setCarpoolData] = useState(null);
-  const addCarpool = async (carpoolData) => {
+
+  const addCarpool = async (carpoolInfo) => {
     try {
       const response = await axios.post(
         `http://localhost:4000/api/carpool`,
-        carpoolData,
+        carpoolInfo,
         { withCredentials: true } 
       );
       setCarpoolData(response.data);
     } catch (error) {
-      console.error("AddCarpool Error:", error.message);
+      console.error("AddCarpool Error:", error);
     }
-    addCarpool();
   };
 
-  return { addCarpool,carpoolData };
+  return { addCarpool, carpoolData };
 };
