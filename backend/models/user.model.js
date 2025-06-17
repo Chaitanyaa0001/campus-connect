@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
     profilephoto:{
         type : String,
         required:true,
-        default: '/user.jpg'
+        default: 'src/assets/Profile.jpg'
     },
     carpools:{
         type:[mongoose.Schema.Types.ObjectId],

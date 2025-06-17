@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { logout as logoutAction} from "../../ReduxFeatures/auth/auth.slice";
 import { persistor } from "../../reduxStorage/redux.store";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const useLogout = () => {
   const dispatch = useDispatch();
@@ -11,7 +12,7 @@ export const useLogout = () => {
 
   const handlelogout= async () => {
     try {
-      await axios.post("http://localhost:4000/api/auth/logout", {}, {
+      await axios.post( `${BASE_URL}/api/auth/logout`, {}, {
         withCredentials: true,
       });
 

@@ -1,24 +1,27 @@
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import './User.css';
 import { NavLink } from 'react-router-dom';
 import logo from '../../assets/Profile.jpg'
 import { motion, AnimatePresence, styleEffect } from 'framer-motion';
 
-import {
-  FaCar,
-  FaUsers,
-  FaSearch,
-  FaFolderOpen,
-  FaUserAlt
-} from "react-icons/fa";
+
+import {FaCar,FaUsers,FaSearch,FaFolderOpen,FaUserAlt} from "react-icons/fa";
 import Carpoolcard from '../../Components/carpoolcards/Carpoolcard';
 import Carrentalcard from '../../Components/carrentalcards/Carrentalcard';
 import Lostnfoundcard from '../../Components/lostnfoundcards/Lostnfoundcard';
 import Projectcard from '../../Components/projectcards/Projectcard';
+// hooks 
+import { useGetUser } from '../../hooks/user/usegetuser';
+import { useUpdateUser } from '../../hooks/user/useupdateuser';
 
 const User = () => {
   const [selectedCategory, setSelectedCategory] = useState('profile');
+
+  const {user,getUserprofile} = useGetUser();
+  const {updateUser,updateUserResponse} = useUpdateUser();
+
+  
 
   const [showDeleteInput, setShowDeleteInput] = useState(false);
   const [isOpen, setisOpen] = useState(true)
@@ -26,10 +29,11 @@ const User = () => {
   const [userdata, setuserdata] = useState({
     username: '',
     email: '',
-    oldPassword: '',
-    newPassword: '',
-    confirmPassword: '',
+    oldpassword: '',
+    newpassword: '',
+    confirmpassword: '',
     deleteConfirm: '',
+    profilephoto:null,
   });
 
   const changeHandler = (e) => {
@@ -37,20 +41,39 @@ const User = () => {
     setuserdata(prev => ({ ...prev, [name]: value }));
   };
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    console.log(userdata);
+  const submitHandler = async (e) => {
+    try {
+      e.preventDefault();
+
+    await updateUser(userdata, userdata.profilephoto);
 
     // Reset profile fields only (preserve deleteConfirm)
     setuserdata(prev => ({
       ...prev,
       username: '',
       email: '',
-      oldPassword: '',
-      newPassword: '',
-      confirmPassword: '',
+      oldpassword: '',
+      newpassword: '',
+      confirmpassword: '', 
+      profilephoto:null
     }));
+    } catch (err) {
+      console.error(err.message);
+    }
   };
+
+    useEffect(() => {
+    if (user) {
+      setuserdata(prev => ({
+        ...prev,
+        username: user?.username ||'',
+        email: user?.email || '',
+        profilephoto: user?.profilephoto ||  null
+      }));
+    }
+  }, [user]);
+
+
 
   const handleDelete = () => {
     if (userdata.deleteConfirm.toLowerCase() === 'delete') {
@@ -59,9 +82,9 @@ const User = () => {
       setuserdata({
         username: '',
         email: '',
-        oldPassword: '',
-        newPassword: '',
-        confirmPassword: '',
+        oldpassword: '',
+        newpassword: '',
+        confirmpassword: '',
         deleteConfirm: '',
       });
       setShowDeleteInput(false);
@@ -310,19 +333,42 @@ const User = () => {
               )}
               </div>
             </div>
+
             <div className="userform">
-              <img src={logo} alt="logo" />
+              <label htmlFor="profile-upload" style={{ cursor: "pointer", display: "inline-block" }}>
+                  <img
+                      src={
+                        userdata.profilephoto && typeof userdata.profilephoto !== "string"
+                          ? URL.createObjectURL(userdata.profilephoto)
+                          : user?.profilephoto || logo
+                      }
+                    alt={logo}
+                    style={{
+                      width: "120px",
+                      height: "120px",
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </label>
+                
               <form onSubmit={submitHandler}>
+                <input type="file" id="profile-upload" accept="image/*" style={{ display: "none" }}
+                   onChange={(e) =>
+                  setuserdata((prev) => ({
+                    ...prev,
+                    profilephoto: e.target.files[0],
+                   }))}/>
                 <p>Username</p>
                 <input type="text" name="username" value={userdata.username} onChange={changeHandler} placeholder="Username" />
                 <p>Email</p>
                 <input type="email" name="email" value={userdata.email} onChange={changeHandler} placeholder="Email" />
                 <p> Old Password</p>
-                <input type="password" name="oldPassword" value={userdata.oldPassword} onChange={changeHandler} placeholder="Old Password" />
+                <input type="password" name="oldpassword" value={userdata.oldpassword} onChange={changeHandler} placeholder="Old Password" />
                 <p> New Password</p>
-                <input type="password" name="newPassword" value={userdata.newPassword} onChange={changeHandler} placeholder="New Password" />
+                <input type="password" name="newpassword" value={userdata.newpassword} onChange={changeHandler} placeholder="New Password" />
                 <p>Confirm Password</p>
-                <input type="password" name="confirmPassword" value={userdata.confirmPassword} onChange={changeHandler} placeholder="Confirm Password" />
+                <input type="password" name="confirmpassword" value={userdata.confirmpassword} onChange={changeHandler} placeholder="Confirm Password" />
                 <button type="submit">Update</button>
               </form>
             </div>

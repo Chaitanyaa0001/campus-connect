@@ -1,13 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 export const useAddCarpool = () => {
   const [carpoolData, setCarpoolData] = useState(null);
 
   const addCarpool = async (carpoolInfo) => {
     try {
-      const response = await axios.post(
-        `http://localhost:4000/api/carpool`,
+      const response = await axios.get(`${BASE_URL}/api/carpool`,
         carpoolInfo,
         { withCredentials: true } 
       );

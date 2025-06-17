@@ -96,3 +96,25 @@
     border-radius: 8px;
 
 }
+.profile-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+
+/* .profile-photo-container {
+  display: flex;
+  justify-content: fle;
+  margin-bottom: 1rem;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid orange;
+  object-fit: cover;
+} */

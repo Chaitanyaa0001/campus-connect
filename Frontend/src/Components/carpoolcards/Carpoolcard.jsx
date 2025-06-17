@@ -16,7 +16,7 @@ const Carpoolcard = ({ from, to, time, seatsAvailable, pricePerSeat }) => {
             </div>
             <div className="CP-details">
               <p> <FaClock/>  {time}</p>
-              <p> <MdAirlineSeatReclineNormal/>   {seatsAvailable} seats available</p>
+              <p> <MdAirlineSeatReclineNormal/>  {seatsAvailable} seats available</p>
               <p><FaMapMarkerAlt/>  {from}</p>
               <p><MdLocationOn/>    {to}</p>
           </div>

@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 
 const getuser = async (req, res) => {
     try {
-        const userId = req.user; // comes from middleware
+        const userId = req.user; 
         const user = await User.findById(userId).select("-password");
         if (!user){ 
             return res.status(404).json({ message: "User not found!" })
@@ -14,7 +14,6 @@ const getuser = async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
 
 const getselecteduser = async (req,res) =>{
     try {
@@ -34,54 +33,62 @@ const getselecteduser = async (req,res) =>{
 const updateuser = async (req, res) => {
     try {
 
-        console.log("→ Update route hit");
-        const userId = req.user; // This comes from the auth middleware
-        const user = await User.findById(userId);
+        const userId = req.user; 
+
+        const user = await User.findById(userId._id);
         if (!user) {
             console.log("✘ User not found");
-            return res.status(404).json({ message: "User not found!" })};
+            return res.status(404).json({ message: "User not found!" })
+        };
 
         const {
         username,
         email,
-        oldpassword,
-        newpassword,
-        confirmpassword,
+        oldPassword,
+        newPassword,
+        confirmPassword,
         } = req.body;
+        console.log(req.body);
   
         if (username) user.username = username;
         if (email) user.email = email;
 
         if (req.file) {
             console.log("✔ File uploaded to:", req.file.path);
-            userId.profilephoto = req.file.path; 
+            user.profilephoto = req.file.path; 
         }
 
-        if(newpassword && confirmpassword) {
-            if (!oldpassword || !newpassword || !confirmpassword) {
+        if(newPassword && confirmPassword) {
+            if (!oldPassword || !newPassword || !confirmPassword) {
                 return res.status(400).json({ message: "All password fields are required!" });
             }    
-            const isMatch = await bcrypt.compare(oldpassword, user.password);
+            const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+            console.log("Old password match:", isMatch);
+
             if(!isMatch){ 
                 return res.status(401).json({ message: "Old password is incorrect" })
             };
-            if(newpassword !== confirmpassword) {
+            if(newPassword !== confirmPassword) {
                 return res.status(409).json({ message: "New passwords do not match!" })
             };
-            if (newpassword.length < 8) {
+            if (newPassword.length < 8) {
                 return res.status(400).json({ message: "Password must be 8+ characters" });
             };
             const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-            if (!strongPassword.test(newpassword)) {
+            if (!strongPassword.test(newPassword)) {
                 return res.status(400).json({
                 message:
                     "Password must include uppercase, lowercase, number, and special character",
                 });
             }
             const salt = await bcrypt.genSalt(10);
-            user.password = await bcrypt.hash(newpassword, salt);
+            const hashedPassword = await bcrypt.hash(newPassword, salt);
+            user.password = hashedPassword;
+
         }
         await user.save();
+        console.log(user);
         return res.status(200).json({ message: "Profile updated successfully!" });
 
     } catch (err) {

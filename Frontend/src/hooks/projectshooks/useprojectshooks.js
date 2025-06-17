@@ -1,13 +1,14 @@
 // src/hooks/projectshooks/useprojectshooks.js
 import axios from "axios";
 import { useEffect, useState } from "react";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const useprojects = () => {
   const [projects, setprojects] = useState(null);
 
   const getallprojects = async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/api/projects`, {
+      const res = await axios.get(`${BASE_URL}/api/projects`, {
         withCredentials: true,
       });
       setprojects(res.data.projects); // because your backend returns { projects: [...] }
