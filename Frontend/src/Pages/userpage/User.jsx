@@ -93,7 +93,7 @@ const User = () => {
       alert("Please type 'delete' to confirm account deletion.");
     }
   } catch (err) {
-
+ 
     console.error(err);
   }
 };
