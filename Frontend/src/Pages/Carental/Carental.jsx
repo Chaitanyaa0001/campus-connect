@@ -5,13 +5,14 @@ import { FaCar } from "react-icons/fa";
 import { motion } from 'framer-motion'; // ✅ Import Framer Motion
 import { useCarRental } from '../../hooks/carrentalhooks/usecarrentalhook';
 import {useAddcarrental} from '../../hooks/carrentalhooks/useaddcarrental'
+import { useUserResources } from '../../hooks/user/useUserresources';
 
 
 
 const Carental = () => {
   const {carrental,getallcarrentals} = useCarRental();
   const {createcarrental} = useAddcarrental();
-
+const { refetchResources } = useUserResources();
 
   const [showForm, setShowForm] = useState(false);
   const [newCar, setNewCar] = useState({
@@ -49,6 +50,7 @@ const Carental = () => {
     try {
       await createcarrental(newCar,imageFile)
       await getallcarrentals();
+       refetchResources();
 
     const id = Date.now();
     setShowForm(false);

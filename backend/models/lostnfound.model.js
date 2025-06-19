@@ -27,6 +27,5 @@ const lostnfoundSchema = mongoose.Schema({
   timestamps: true
 });
 
-const LostnFound = mongoose.model('LostnFound', lostnfoundSchema);
 
-module.exports = LostnFound;
+module.exports = mongoose.models.LostnFound || mongoose.model('LostnFound', lostnfoundSchema);

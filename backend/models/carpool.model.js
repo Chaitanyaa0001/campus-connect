@@ -31,5 +31,4 @@ const carpoolSchema = new mongoose.Schema({
     timestamps : true
 });
 
-const Carpool = mongoose.model('Carpool', carpoolSchema);
-module.exports = Carpool;
+module.exports = mongoose.models.Carpool || mongoose.model('Carpool', carpoolSchema);

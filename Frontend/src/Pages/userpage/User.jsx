@@ -1,11 +1,9 @@
-import React, { use, useEffect, useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import './User.css';
 import { NavLink } from 'react-router-dom';
 import logo from '../../assets/Profile.jpg'
-import { motion, AnimatePresence, styleEffect } from 'framer-motion';
-
-
+import { motion, AnimatePresence,  } from 'framer-motion';
 import {FaCar,FaUsers,FaSearch,FaFolderOpen,FaUserAlt} from "react-icons/fa";
 import Carpoolcard from '../../Components/carpoolcards/Carpoolcard';
 import Carrentalcard from '../../Components/carrentalcards/Carrentalcard';
@@ -14,12 +12,24 @@ import Projectcard from '../../Components/projectcards/Projectcard';
 // hooks 
 import { useGetUser } from '../../hooks/user/usegetuser';
 import { useUpdateUser } from '../../hooks/user/useupdateuser';
+import  useDeleteUser from '../../hooks/user/usedeleteuser';
+import { useNavigate } from 'react-router-dom';
+import { useUserResources } from '../../hooks/user/useUserresources';
+
+
+
+
+
+
 
 const User = () => {
   const [selectedCategory, setSelectedCategory] = useState('profile');
+  const navigate = useNavigate();
 
   const {user,getUserprofile} = useGetUser();
   const {updateUser,updateUserResponse} = useUpdateUser();
+  const {deleteUser} = useDeleteUser();
+  const {resources, refetchResources} = useUserResources();
 
   
 
@@ -75,136 +85,26 @@ const User = () => {
 
 
 
-  const handleDelete = () => {
+ const handleDelete = async () => {
+  try {
     if (userdata.deleteConfirm.toLowerCase() === 'delete') {
-      alert('Your account has been deleted.');
-
-      setuserdata({
-        username: '',
-        email: '',
-        oldpassword: '',
-        newpassword: '',
-        confirmpassword: '',
-        deleteConfirm: '',
-      });
-      setShowDeleteInput(false);
-
-     
+      await deleteUser(); 
     } else {
       alert("Please type 'delete' to confirm account deletion.");
     }
-  };
+  } catch (err) {
 
-  const carpools = [
-    {
-      from: "University Main Campus",
-      to: "Downtown",
-      time: "Today, 5:30 PM",
-      seatsAvailable: 3,
-      pricePerSeat: 100,
-    },
-    {
-      from: "College Heights Apartments",
-      to: "Science Building",
-      time: "Tomorrow, 8:00 AM",
-      seatsAvailable: 2,
-      pricePerSeat: 150,
-    },
-    {
-      from: "Engineering Building",
-      to: "Westside Mall",
-      time: "Friday, 4:15 PM",
-      seatsAvailable: 3,
-      pricePerSeat: 90,
-    }
-  ];
+    console.error(err);
+  }
+};
 
-  const carrental = [
-    {
-      id: 1,
-      name: "Toyota Corolla",
-      rentalAmount: "₹2500/day",
-      rentalPeriod: "3 days",
-      mileage: "18 km/l",
-      description: "A comfortable and fuel-efficient sedan with automatic transmission and spacious seating.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfwwQU1H_ySuQXx7lqdv3eCXJ15A3AxDViaA&s",
-    },
-    {
-      id: 2,
-      name: "Hyundai Creta",
-      rentalAmount: "₹3000/day",
-      rentalPeriod: "1 week",
-      mileage: "16 km/l",
-      description: "Stylish SUV with excellent ground clearance, touchscreen infotainment, and powerful AC.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfwwQU1H_ySuQXx7lqdv3eCXJ15A3AxDViaA&s",
-    },
-    {
-      id: 3,
-      name: "Maruti Swift",
-      rentalAmount: "₹1800/day",
-      rentalPeriod: "2 days",
-      mileage: "22 km/l",
-      description: "Compact hatchback ideal for city rides. Manual transmission and high mileage.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfwwQU1H_ySuQXx7lqdv3eCXJ15A3AxDViaA&s",
-    },
-    {
-      id: 4,
-      name: "Mahindra Thar",
-      rentalAmount: "₹4000/day",
-      rentalPeriod: "1 weekend",
-      mileage: "15 km/l",
-      description: "Rugged off-road SUV with convertible top, 4x4 drive, and strong road presence.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfwwQU1H_ySuQXx7lqdv3eCXJ15A3AxDViaA&s",
-    }
-  ];
+const carpools = resources.carpools;
+const carrental = resources.carrentals;
+const lnfcards = resources.lostnfound;
+const projects = resources.projects;
 
-  const lnfcards = [
-    {
-      itemName: "Black Wallet",
-      itemDescription: "Found near the cafeteria. Contains ID and a few cards.",
-      status: "Found",
-      image: "https://media.wired.com/photos/5b22c5c4b878a15e9ce80d92/master/w_2560%2Cc_limit/iphonex-TA.jpg"
-    },
-    {
-      itemName: "Silver Water Bottle",
-      itemDescription: "Left in the computer lab, has a dent on the side.",
-      status: "Found",
-      image: "https://media.wired.com/photos/5b22c5c4b878a15e9ce80d92/master/w_2560%2Cc_limit/iphonex-TA.jpg"
-    }
-  ];
 
-  const projects = [
-    {
-      title: "Campus Navigation App",
-      category: "Mobile Development",
-      description: "Creating a mobile app to help navigate the campus buildings and find the shortest routes between classes.",
-      members: 5,
-      dueDate: "May 15, 2025",
-      progress: 65,
-      status: "Active",
-      technologies: ["React Native", "Maps API"]
-    },
-    {
-      title: "Student Wellness Survey",
-      category: "Research",
-      description: "Conducting research on student wellness and mental health to inform campus services.",
-      members: 3,
-      dueDate: "April 30, 2025",
-      progress: 40,
-      status: "Active",
-      technologies: ["Research", "mobile development"]
-    },
-    {
-      title: "Campus Sustainability Initiative",
-      category: "Environmental",
-      description: "Developing a plan to reduce waste and increase sustainability practices across campus.",
-      members: 8,
-      dueDate: "June 10, 2025",
-      progress: 55,
-      status: "Active",
-      technologies: ["data analyst"]
-    }
-  ];
+  
 
   const renderCards = () => {
     switch (selectedCategory) {

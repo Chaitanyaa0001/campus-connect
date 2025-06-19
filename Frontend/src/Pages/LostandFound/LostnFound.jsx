@@ -5,14 +5,17 @@ import { FaSearch } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { uselostnfound } from "../../hooks/lostnfound/uselnfhooks";
 import { useAddlostnfound } from "../../hooks/lostnfound/useaddlnfhooks";
+import { useUserResources } from "../../hooks/user/useUserresources";
 
 const LostnFound = () => {
   const { lostAndFound, getallLostnfound } = uselostnfound();
   const { createlostnfound } = useAddlostnfound();
+  const { refetchResources } = useUserResources();
 
   const [showForm, setShowForm] = useState(false);
   const [searchquery, setsearchquery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  
 
   const [newlnf, setNewlnf] = useState({
     itemName: "",
@@ -51,6 +54,7 @@ const LostnFound = () => {
     });
     setImagefile(null);
     getallLostnfound();
+    refetchResources();
     setShowForm(false);
   } catch (err) {
     console.error("Submission failed", err);

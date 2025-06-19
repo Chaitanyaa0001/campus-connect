@@ -11,7 +11,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     loginSuccess: (state, action) => {
-      console.log("triggered");
+      
       
       state.user = action.payload
       state.isAuthenticated = true;

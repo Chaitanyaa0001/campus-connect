@@ -7,7 +7,8 @@ const ProtectedRoute = ({ children }) => {
   console.log("protected route |Autheticsterd :",isAuthenticated)
   
 
-  return isAuthenticated ? children : <Navigate to="/login" />
+  return isAuthenticated ? children : <Navigate to="/" />
 }
 export default ProtectedRoute
+
 

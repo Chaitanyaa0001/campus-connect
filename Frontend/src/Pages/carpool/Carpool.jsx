@@ -7,10 +7,13 @@ import { MdLocationOn, MdAirlineSeatReclineNormal } from 'react-icons/md';
 import { motion } from 'framer-motion'; // ✅ Import Framer Motion
 import { useCarpool } from '../../hooks/carpoolhooks/useCarpool';
 import { useAddCarpool } from '../../hooks/carpoolhooks/useaddcarpool';
+import { useUserResources } from '../../hooks/user/useUserresources';
 
 const Carpool = () => {
   const { carpools, setCarpools, loading, getAllCarpools } = useCarpool();
   const { addCarpool, carpoolData } = useAddCarpool();
+  const { refetchResources } = useUserResources(); 
+
 
 
   const [searchquery, setsearchquery] = useState("");
@@ -34,6 +37,7 @@ const Carpool = () => {
 
     await addCarpool(newRide);
     getAllCarpools();
+    refetchResources(); 
 
 
     setNewRide({

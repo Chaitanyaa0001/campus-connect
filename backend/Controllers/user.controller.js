@@ -1,5 +1,10 @@
 const User = require("../models/user.model");
+const Carpool = require('../models/carpool.model');
+const LostnFound = require('../models/lostnfound.model');
+const CarRental = require('../models/carrental.model');
+const Projects  =require("../models/project.model");
 const bcrypt = require('bcryptjs')
+const cloudinary = require('../utils/cloudinary');
 
 const getuser = async (req, res) => {
     try {
@@ -111,6 +116,13 @@ const deleteUser = async (req, res) => {
       await cloudinary.uploader.destroy(`profile_photos/${publicId}`);
     }
 
+    await Promise.all([
+        Carpool.deleteMany({ user: userId }),
+        CarRental.deleteMany({ user: userId }),
+        LostnFound.deleteMany({ user: userId }),
+        Projects.deleteMany({ user: userId }),
+    ]);
+
     await user.deleteOne();
 
     res.clearCookie("token", {
@@ -126,11 +138,35 @@ const deleteUser = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+const getUserResources = async (req, res) => {
+  try {
+    const userId = req.user;
+    console.log("✅ Fetching resources for user:", userId);
 
+    const [carpools, carrentals, projects, lostnfound] = await Promise.all([
+      Carpool.find({ user: userId }),
+      CarRental.find({ user: userId }),
+      Projects.find({ user: userId }),
+      LostnFound.find({ user: userId }),
+    ]);
+       console.log("✅ Fetching resources for user:", userId);
+    return res.status(200).json({
+      carpools,
+      carrentals,
+      projects,
+      lostnfound,
+    });
+
+  } catch (err) {
+    console.error("❌ Error fetching user data", err.message);
+    return res.status(500).json({ message: "Internal Server Error",error: err.message });
+  }
+};
 
 module.exports = {
     getuser,
     getselecteduser,
     updateuser,
-    deleteUser
+    deleteUser,
+    getUserResources
 }

@@ -40,6 +40,5 @@ const carRentalschema = new mongoose.Schema({
     timestamps : true
 });
 
-const CarRental = mongoose.model('CarRental',carRentalschema);
-module.exports = CarRental;
+module.exports = mongoose.models.CarRental || mongoose.model('CarRental', carRentalschema);
 

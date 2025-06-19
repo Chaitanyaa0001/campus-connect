@@ -8,7 +8,7 @@ export const useAddCarpool = () => {
 
   const addCarpool = async (carpoolInfo) => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/carpool`,
+      const response = await axios.post(`${BASE_URL}/api/carpool`,
         carpoolInfo,
         { withCredentials: true } 
       );

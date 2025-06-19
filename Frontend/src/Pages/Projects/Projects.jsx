@@ -5,11 +5,13 @@ import { FaSearch, FaPlusCircle, FaCalendarAlt, FaUsers } from "react-icons/fa";
 import { motion } from 'framer-motion';
 import { useprojects } from '../../hooks/projectshooks/useprojectshooks';
 import { useaddprojects } from '../../hooks/projectshooks/useaddprojects';
+import { useUserResources } from '../../hooks/user/useUserresources';
 
 const Projects = () => {
   const [searchquery, setsearchquery] = useState("");
   const { projects, setprojects, getallprojects } = useprojects();
   const { createproject } = useaddprojects();
+ const { refetchResources } = useUserResources();
 
   const [showForm, setShowForm] = useState(false);
   const [newProject, setNewProject] = useState({
@@ -35,6 +37,7 @@ const Projects = () => {
 
     await createproject(finalProject);
     await getallprojects();
+    refetchResources()
 
     setNewProject({
       projectTitle: "",

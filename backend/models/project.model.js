@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const projectScehema = mongoose.Schema({
+const projectSchema = mongoose.Schema({
     projectTitle:{
         type:String,
         required:true
@@ -36,5 +36,4 @@ const projectScehema = mongoose.Schema({
     timestamps : true
 });
 
-const Projects = mongoose.model('Projects',projectScehema);
-module.exports = Projects;
+module.exports = mongoose.models.Project || mongoose.model('Project', projectSchema);
