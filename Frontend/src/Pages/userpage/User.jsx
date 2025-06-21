@@ -98,66 +98,66 @@ const User = () => {
   }
 };
 
+// rendering cards 
+
 const carpools = resources.carpools;
 const carrental = resources.carrentals;
 const lnfcards = resources.lostnfound;
 const projects = resources.projects;
 
 
-  
+const renderCards = () => {
+  switch (selectedCategory) {
+    case 'carpools':
+      return carpools.map((item, index) => (
+        <Carpoolcard
+          key={index}
+          from={item.from}
+          to={item.to}
+          time={item.time}
+          seatsAvailable={item.seatsAvailable}
+          pricePerSeat={item.pricePerSeat}
+        />
+      ));
+    case 'carrental':
+      return carrental.map((item, index) => (
+        <Carrentalcard
+          key={index}
+          Choosefile={item.Choosefile}
+          VechicleModel={item.VechicleModel}
+          VechicleDescription={item.VechicleDescription}
+          RentalAmount={item.RentalAmount}
+          RentalPeriod={item.RentalPeriod}
+          VechileMileage={item.VechileMileage}
+        />
+      ));
+    case 'lostnfound':
+      return lnfcards.map((item, index) => (
+        <Lostnfoundcard
+          key={index}
+          choosefile={item.choosefile}
+          itemName={item.itemName}
+          itemDescription={item.itemDescription}
+          itemStatus={item.itemStatus}
+        />
+      ));
+    case 'projects':
+      return projects.map((item, index) => (
+        <Projectcard
+          key={index}
+          projectTitle={item.projectTitle}
+          Description={item.Description}
+          Category={item.Category}
+          personrequired={item.personrequired}
+          dueDate={item.dueDate}
+          Technologies={item.Technologies}
+        />
+      ));
+    default:
+      return null;
+  }
+};
 
-  const renderCards = () => {
-    switch (selectedCategory) {
-      case 'carpools':
-        return carpools.map((item, index) => (
-          <Carpoolcard
-            key={index}
-            from={item.from}
-            to={item.to}
-            time={item.time}
-            seatsAvailable={item.seatsAvailable}
-            pricePerSeat={item.pricePerSeat}
-          />
-        ));
-      case 'carrental':
-        return carrental.map((item, index) => (
-          <Carrentalcard
-            key={index}
-            image={item.image}
-            name={item.name}
-            description={item.description}
-            rentalAmount={item.rentalAmount}
-            rentalPeriod={item.rentalPeriod}
-            mileage={item.mileage}
-          />
-        ));
-      case 'lostnfound':
-        return lnfcards.map((item, index) => (
-          <Lostnfoundcard
-            key={index}
-            image={item.image}
-            itemName={item.itemName}
-            itemDescription={item.itemDescription}
-            status={item.status}
-          />
-        ));
-      case 'projects':
-        return projects.map((item, index) => (
-          <Projectcard
-            key={index}
-            title={item.title}
-            description={item.description}
-            category={item.category}
-            members={item.members}
-            dueDate={item.dueDate}
-            status={item.status}
-            technologies={item.technologies}
-          />
-        ));
-      default:
-        return null;
-    }
-  };
 
   return (
     <div className='component-container'>
@@ -217,12 +217,7 @@ const projects = resources.projects;
               
               {showDeleteInput && (
                 <form>
-                 <input
-                    type="text"
-                    name="deleteConfirm"
-                    value={userdata.deleteConfirm}
-                    onChange={changeHandler}
-                    placeholder="Type 'delete' to confirm"
+                 <input type="text" name="deleteConfirm" value={userdata.deleteConfirm} onChange={changeHandler}placeholder="Type 'delete' to confirm"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         handleDelete();   
@@ -233,7 +228,6 @@ const projects = resources.projects;
               )}
               </div>
             </div>
-
             <div className="userform">
               <label htmlFor="profile-upload" style={{ cursor: "pointer", display: "inline-block" }}>
                   <img
