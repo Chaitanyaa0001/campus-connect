@@ -53,7 +53,7 @@ const updateuser = async (req, res) => {
         newPassword,
         confirmPassword,
         } = req.body;
-        console.log(req.body);
+        
   
         if (username) user.username = username;
         if (email) user.email = email;
@@ -69,7 +69,7 @@ const updateuser = async (req, res) => {
             }    
             const isMatch = await bcrypt.compare(oldPassword, user.password);
 
-            console.log("Old password match:", isMatch);
+            
 
             if(!isMatch){ 
                 return res.status(401).json({ message: "Old password is incorrect" })

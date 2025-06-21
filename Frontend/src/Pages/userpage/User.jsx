@@ -100,8 +100,18 @@ const User = () => {
 
 // rendering cards 
 
-const carpools = resources.carpools;
-const carrental = resources.carrentals;
+const [carpools, setCarpools] = useState([]);
+
+useEffect(() => {
+  setCarpools(resources.carpools);
+}, [resources.carpools]);
+
+const [carrental, setCarrental] = useState([]);
+
+useEffect(() => {
+  setCarrental(resources.carrentals);
+}, [resources.carrentals]);
+
 const lnfcards = resources.lostnfound;
 const projects = resources.projects;
 
@@ -112,23 +122,31 @@ const renderCards = () => {
       return carpools.map((item, index) => (
         <Carpoolcard
           key={index}
+          id={item._id}
           from={item.from}
           to={item.to}
           time={item.time}
           seatsAvailable={item.seatsAvailable}
           pricePerSeat={item.pricePerSeat}
+          onDeleteLocal={() => {
+        setCarpools((prev) => prev.filter((c) => c._id !== item._id));
+      }}
         />
       ));
     case 'carrental':
       return carrental.map((item, index) => (
         <Carrentalcard
           key={index}
+           id={item._id}
           Choosefile={item.Choosefile}
           VechicleModel={item.VechicleModel}
           VechicleDescription={item.VechicleDescription}
           RentalAmount={item.RentalAmount}
           RentalPeriod={item.RentalPeriod}
           VechileMileage={item.VechileMileage}
+          onDeleteLocal={() => {
+        setCarrental((prev) => prev.filter((c) => c._id !== item._id));
+      }}
         />
       ));
     case 'lostnfound':

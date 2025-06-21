@@ -1,4 +1,7 @@
 const Carpool = require('../models/carpool.model');
+const mongoose = require("mongoose");
+const User = require("../models/user.model")
+
 
 const getAllCarpools = async (req, res) => {
     try {
@@ -39,22 +42,33 @@ const postcarpool = async(req,res) =>{
     }
 }
 
-const deletecarpool = async (req,res)=>{
-    
-    try {
-          const user = req.user;
-        const{id}= req.params;
-        const deleted = await Carpool.findOneAndDelete({ _id: id, user: user._id });
+const deletecarpool = async (req, res) => {
+  try {
+    const user = req.user;
+    const { id } = req.params;
 
-        if(!deleted) {
-            return res.status(404).json({message:"No carpool Found "})
-        };
+    // Delete the carpool only if it belongs to the logged-in user
+    const deletedCarpool = await Carpool.findOneAndDelete({
+      _id: id,
+      user: user._id,
+    });
 
-          return res.status(200).json({ message: "Carpool deleted successfully" });
-    } catch (error) {
-        console.error("deleted carpool error:",error.message);
-        return res.status(500).json({message: "internal server error"})
+    if (!deletedCarpool) {
+      return res.status(404).json({ message: "No carpool found or not authorized" });
     }
 
-}
+    // Also remove the carpool reference from the user's list
+    await User.findByIdAndUpdate(user._id, {
+      $pull: { carpools: id },
+    });
+
+    return res.status(200).json({ message: "Carpool deleted successfully" });
+
+  } catch (error) {
+    console.error("Delete Carpool Error:", error.message);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
 module.exports = { getAllCarpools,postcarpool,deletecarpool }
