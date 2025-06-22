@@ -50,26 +50,10 @@ const postproject = async (req, res) => {
   }
 };
 
-// DELETE a project by ID
-const deleteProject = async (req, res) => {
-  try {
-    const user = req.user;
-    const { id } = req.params;
-    const deleted = await Projects.findByIdAndDelete({ _id: id, user: user._id });
 
-    if (!deleted) {
-      return res.status(404).json({ message: "Project card not found" });
-    }
-
-    return res.status(200).json({ message: "Project card deleted successfully" });
-  } catch (error) {
-    console.error("Project delete error:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
-};
 
 module.exports = {
   getallprojects,
   postproject,
-  deleteProject
+  
 };

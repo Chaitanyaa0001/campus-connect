@@ -6,63 +6,78 @@ import {
   FaSearch,
   FaFolderOpen,
   FaSignOutAlt,
-  FaBars, FaTimes ,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
-
-import './Sidebar.css';
-import logo from "../../assets/Profile.jpg";
-import { NavLink,Link} from 'react-router-dom'; 
+import "./Sidebar.css";
+import defaultAvatar from "../../assets/Profile.jpg";
+import { NavLink, Link } from "react-router-dom";
 import { useLogout } from "../../hooks/logouthooks/logouthook";
+import { useGetUser } from "../../hooks/user/usegetuser"; 
 
 const Sidebar = () => {
-  const logout = useLogout()
+  const logout = useLogout();
   const [isOpen, setisOpen] = useState(true);
+  const { user } = useGetUser(); 
 
   const navbarToggle = () => {
     setisOpen(!isOpen);
-    console.log(isOpen);
-  }
+  };
 
   return (
     <div className="main">
-      <aside className={isOpen ? 'sidebar' : 'sidebar closed'}>
+      <aside className={isOpen ? "sidebar" : "sidebar closed"}>
         <div className="sidebar-header" onClick={navbarToggle}>
-        {isOpen && <h2 className="close-btn">UniVerse</h2>}
-        {isOpen ?  <FaTimes /> : <FaBars />}  
-       </div>
+          {isOpen && <h2 className="close-btn">UniVerse</h2>}
+          {isOpen ? <FaTimes /> : <FaBars />}
+        </div>
 
-       <div className="user-info">
+        <div className="user-info">
           <Link to="/user" className="user-img">
-            <img src={logo} alt="user profile" />
+            <img
+              src={user?.profilePhoto || defaultAvatar}
+              alt="user profile"
+            />
           </Link>
 
-          <div className="user-details">
-            {isOpen && 
+          {isOpen && (
+            <div className="user-details">
               <Link to="/user">
-                <h3>Ravi</h3>
-                <p>Ravibsdka0@gmail.com</p>
+                <h3>{user?.username || "Loading..."}</h3>
+                <p>{user?.email || ""}</p>
               </Link>
-             }
-          </div>
-        
-      </div>
+            </div>
+          )}
+        </div>
 
-      <div className="menu">
-        <NavLink className={({ isActive }) => isActive ? 'active' : ''} to="/discussion"><FaComments  size = {25}/>{isOpen && 'Discussion'}</NavLink>
-        <NavLink className={({ isActive }) => isActive ? 'active' : ''} to="/inbox"><FaComments  size = {25}/>{isOpen && 'Inbox'}</NavLink>
-        <NavLink className={({ isActive }) => isActive ? 'active' : ''} to="/carental"><FaCar size={25} />{isOpen && 'Car Rental'}</NavLink>
-        <NavLink className={({ isActive }) => isActive ? 'active' : ''} to="/carpool"><FaUsers  size ={25}/>{isOpen && 'Car Pool'}</NavLink>
-        <NavLink className={({ isActive }) => isActive ? 'active' : ''} to="/lost&found"><FaSearch  size = {25}/>{isOpen && 'Lost and Found'} </NavLink>
-        <NavLink className={({ isActive }) => isActive ? 'active' : ''} to="/projects"><FaFolderOpen size ={25}/>{isOpen && 'Projects'}</NavLink>
-      </div>
+        <div className="menu">
+          <NavLink to="/discussion" className={({ isActive }) => isActive ? 'active' : ''}>
+            <FaComments size={25} />{isOpen && 'Discussion'}
+          </NavLink>
+          <NavLink to="/inbox" className={({ isActive }) => isActive ? 'active' : ''}>
+            <FaComments size={25} />{isOpen && 'Inbox'}
+          </NavLink>
+          <NavLink to="/carental" className={({ isActive }) => isActive ? 'active' : ''}>
+            <FaCar size={25} />{isOpen && 'Car Rental'}
+          </NavLink>
+          <NavLink to="/carpool" className={({ isActive }) => isActive ? 'active' : ''}>
+            <FaUsers size={25} />{isOpen && 'Car Pool'}
+          </NavLink>
+          <NavLink to="/lost&found" className={({ isActive }) => isActive ? 'active' : ''}>
+            <FaSearch size={25} />{isOpen && 'Lost and Found'}
+          </NavLink>
+          <NavLink to="/projects" className={({ isActive }) => isActive ? 'active' : ''}>
+            <FaFolderOpen size={25} />{isOpen && 'Projects'}
+          </NavLink>
+        </div>
 
-      <div className="bottom-menu">
-        <button className="menu-item" onClick={logout}>  <FaSignOutAlt size ={25} /> {isOpen && 'Logout'}</button>
-      </div>
-    </aside>
-
-  </div>
-
+        <div className="bottom-menu">
+          <button className="menu-item" onClick={logout}>
+            <FaSignOutAlt size={25} />{isOpen && 'Logout'}
+          </button>
+        </div>
+      </aside>
+    </div>
   );
 };
 

@@ -38,25 +38,9 @@ const postlostnfound = async (req, res) => {
   }
 };
 
-const DeleteLostnfound = async (req, res) => {
-  try {
-    const user = req.user;
-    const { id } = req.params;
-    const deletelostnfound = await LostnFound.findByIdAndDelete( {_id :id, user :user._id});
 
-    if (!deletelostnfound) {
-      return res.status(404).json({ message: "No Lost & Found card found" });
-    }
-
-    return res.status(200).json({ message: "Lost & Found card deleted" });
-  } catch (error) {
-    console.error("Delete lost & found error:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
-};
 
 module.exports = {
   getalllostnfound,
   postlostnfound,
-  DeleteLostnfound
 };

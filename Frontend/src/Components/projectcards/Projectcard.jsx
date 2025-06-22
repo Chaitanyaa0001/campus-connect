@@ -28,7 +28,7 @@ const Projectcard = ({
           ))}
         </div>
       </div>
-      <button className="projectbooking"><FaTrash size={20} color="red" /></button>
+      <button className="projectbooking">Get Involved</button>
     </div>
   );
 };

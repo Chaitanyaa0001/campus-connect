@@ -23,7 +23,7 @@ const Lostnfoundcard = ({
           </p>
         </div>
         <button className='contactcard'>
-          <FaTrash size={20} color='red' />
+         Contact
         </button>
       </div>
     </div>

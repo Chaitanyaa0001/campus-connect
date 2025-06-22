@@ -82,3 +82,15 @@
 .Login-bottom a:hover{
     text-decoration: underline;
 }
+.google-login {
+  margin-top: 1em;
+ 
+  text-align: center;
+}
+
+.google-login p {
+  margin-bottom: 10px;
+  font-weight: 500;
+ 
+  /* color: #555; */
+}

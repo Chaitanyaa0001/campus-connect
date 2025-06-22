@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user.model');
 const generateToken = require('../utils/generateToken.js');
 
+const jwt = require("jsonwebtoken");
+
 const register = async (req, res) => {
     const { username, email, password, confirmPassword } = req.body;
 
@@ -107,4 +109,53 @@ const logout = async (req, res) => {
     }
 };
 
-module.exports = { register, login, logout };
+const googleLogin = async (req, res) => {
+  try {
+    const { email, username, profilePhoto } = req.body;
+
+    if (!email || !username || !profilePhoto) {
+      return res.status(400).json({ message: "Missing required Google user info" });
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = await User.create({
+        email,
+        username,
+        profilePhoto,
+        password: null,
+        authType: "google"
+      });
+    } else {
+      // Optional: update profile info if changed
+      user.username = username;
+      user.profilePhoto = profilePhoto;
+      await user.save();
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d"
+    });
+
+    
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "Lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    res.status(200).json({
+      username: user.username,
+      email: user.email,
+      profilePhoto: user.profilePhoto
+    });
+
+  } catch (error) {
+    console.error("Google Login Error:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports = { register, login, logout,googleLogin };

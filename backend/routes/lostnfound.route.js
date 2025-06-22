@@ -8,6 +8,6 @@ const checkauth = require("../middlewares/auth.middleware")
 
 router.get('/', checkauth , getalllostnfound);
 router.post("/",checkauth , upload.single("choosefile"), postlostnfound);
-router.delete('/:id',checkauth, DeleteLostnfound);
+
 
 module.exports = router;

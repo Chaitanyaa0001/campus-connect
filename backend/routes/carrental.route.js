@@ -11,7 +11,4 @@ const checkauth = require("../middlewares/auth.middleware")
 router.get('/',checkauth,getallcars);
 router.post("/", checkauth, uploadCarPhoto.single("Choosefile"), postcarrental); 
 
-
-router.delete('/:id',deletecarrental);
-
 module.exports = router;

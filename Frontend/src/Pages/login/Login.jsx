@@ -4,9 +4,12 @@ import './Login.css';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginSuccess} from '../../ReduxFeatures/auth/auth.slice';
+import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLoginHandler } from '../../hooks/google/usegoogle';
 
 const Login = () => {
 
+  const { handleGoogleLoginSuccess } = useGoogleLoginHandler();
   const navigate = useNavigate();
   const dispatch =  useDispatch();
   const [logindata, setlogindata] = useState({
@@ -79,6 +82,14 @@ const Login = () => {
         />
 
         <button type="submit">Login</button>
+        <div className="google-login">
+            <p>or</p>
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onError={() => console.log("Google login failed")}
+            />
+        </div>
+
 
         <div className="Login-bottom">
           <p>Don't have an account? <Link to="/signup" className="signup-link">Signup</Link></p>

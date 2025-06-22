@@ -2,6 +2,8 @@ import React from 'react';
 import "./Carrentalcard.css";
 import { FaTrash } from "react-icons/fa";
 
+
+
 const Carrentalcard = ({Choosefile,VechicleModel,VechicleDescription,RentalAmount,RentalPeriod,VechileMileage}) => {
   return (
     <div id='carrentalcontainer'>
@@ -20,7 +22,7 @@ const Carrentalcard = ({Choosefile,VechicleModel,VechicleDescription,RentalAmoun
           </div>
           <span className="amountcard">₹{RentalAmount}</span>
         </div>
-        <button className="contactownercard"><FaTrash size={20} color="red" /></button>
+        <button className="contactownercard">Contact Owner</button>
       </div>
     </div>
   );

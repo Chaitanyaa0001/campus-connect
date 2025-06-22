@@ -42,33 +42,7 @@ const postcarpool = async(req,res) =>{
     }
 }
 
-const deletecarpool = async (req, res) => {
-  try {
-    const user = req.user;
-    const { id } = req.params;
-
-    // Delete the carpool only if it belongs to the logged-in user
-    const deletedCarpool = await Carpool.findOneAndDelete({
-      _id: id,
-      user: user._id,
-    });
-
-    if (!deletedCarpool) {
-      return res.status(404).json({ message: "No carpool found or not authorized" });
-    }
-
-    // Also remove the carpool reference from the user's list
-    await User.findByIdAndUpdate(user._id, {
-      $pull: { carpools: id },
-    });
-
-    return res.status(200).json({ message: "Carpool deleted successfully" });
-
-  } catch (error) {
-    console.error("Delete Carpool Error:", error.message);
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
-};
 
 
-module.exports = { getAllCarpools,postcarpool,deletecarpool }
+
+module.exports = { getAllCarpools,postcarpool }

@@ -5,6 +5,6 @@ const checkauth = require("../middlewares/auth.middleware")
 
 router.get('/',checkauth ,getallprojects)
 router.post('/',checkauth,postproject);
-router.delete('/:id',checkauth,deleteProject);
+
 
 module.exports = router;
