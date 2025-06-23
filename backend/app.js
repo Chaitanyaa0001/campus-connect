@@ -7,7 +7,7 @@ const userroutes = require("./routes/user.route.js")
 const carpoolRoutes = require('./routes/carpool.route.js');
 const carrentalroutes = require('./routes/carrental.route.js')
 const lostnfoundroutes = require("./routes/lostnfound.route.js")
-const projectroutes = require('./routes/project.route.js')
+const projectroutes = require('./routes/project.route.js');
 const connectDB = require('./config/database.js');
 require('dotenv').config();
 
@@ -23,14 +23,10 @@ app.use(cors({
     credentials: true
 }));
 
-
-
-
 // middelware 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
 
 // Routes 
 app.use('/api/auth', authRoutes);

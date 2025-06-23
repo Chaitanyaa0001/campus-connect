@@ -1,24 +1,38 @@
-const { handleJoinRoom, handleSendMessage } = require("../controllers/chatController");
+const socketHandler = (io) => {
 
-const socketManager = (io) => {
-  io.on("connection", (socket) => {
-    console.log("✅ User connected:", socket.id);
+    const onlineUsers = new Map();
 
-    // Join room
-    socket.on("join_room", (room) => {
-      handleJoinRoom(socket, room);
+    io.on("connection", (socket) => {
+        console.log("User connected:", socket.id);
+
+        socket.on("join", (userId) => {
+            onlineUsers.set(userId, socket.id);
+            io.emit("onlineUsers", Array.from(onlineUsers.keys()))
+        });
+  
+        socket.on("sendMessage", (data) => {
+            io.emit("receiveMessage", data);
+        });
+  
+        socket.on("privateMessage", ({ receiverId, message }) => {
+            const receiverSocketId = onlineUsers.get(receiverId);
+            if(receiverSocketId) {
+                io.to(receiverSocketId).emit("receivePrivateMessage", message);
+            }
+        });
+  
+        socket.on("disconnect", (reason) => {
+            for (let [userId, id] of onlineUsers.entries()) {
+                if (id === socket.id) {
+                    onlineUsers.delete(userId);
+                    break;
+                }
+            }
+            io.emit("onlineUsers", Array.from(onlineUsers.keys()));
+            console.log("User disconnected:", socket.id, reason);
+        });
     });
+}
 
-    // Send message
-    socket.on("send_message", (data) => {
-      handleSendMessage(socket, data);
-    });
-
-    // Disconnect
-    socket.on("disconnect", () => {
-      console.log("🔌 Disconnected:", socket.id);
-    });
-  });
-};
-
-module.exports = socketManager;
+module.exports = socketHandler;
+  
