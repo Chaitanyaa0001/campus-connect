@@ -83,7 +83,7 @@ const Login = () => {
 
         <button type="submit">Login</button>
         <div className="google-login">
-            <p>or</p>
+            <p>or</p>w
             <GoogleLogin
               onSuccess={handleGoogleLoginSuccess}
               onError={() => console.log("Google login failed")}

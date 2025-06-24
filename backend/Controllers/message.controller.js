@@ -1,5 +1,5 @@
-const Message = require("../models/message.model");
 const Conversation = require("../models/conversation.model");
+const Message = require("../models/message.model");
 
 const getPublicMessages = async (req, res) => {
     try {
@@ -14,10 +14,10 @@ const getPublicMessages = async (req, res) => {
 
 const sendPublicMessages = async (req, res) => {
     try {
+        const { input } = req.body;
         const newMessage = await Message.create({
             senderId: req.user._id,
-            message: req.body.message,
-            file: req.file?.filename,
+            message: input,
             isPublic: true
         });
 

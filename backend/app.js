@@ -8,13 +8,12 @@ const carpoolRoutes = require('./routes/carpool.route.js');
 const carrentalroutes = require('./routes/carrental.route.js')
 const lostnfoundroutes = require("./routes/lostnfound.route.js")
 const projectroutes = require('./routes/project.route.js');
+const messageroutes = require('./routes/message.route.js');
 const connectDB = require('./config/database.js');
 require('dotenv').config();
 
 
 // connection (mongo and cloudniary)
-
-
 connectDB();
 require("./utils/cloudinary.js");
 
@@ -35,8 +34,7 @@ app.use('/api/carpool', carpoolRoutes);
 app.use('/api/carrental',carrentalroutes);
 app.use('/api/lostnfound', lostnfoundroutes);
 app.use('/api/projects', projectroutes);
+app.use('/api/messages', messageroutes);
 
 // server 
-app.listen('4000', () => {
-    console.log('server running');
-});
+module.exports = app;

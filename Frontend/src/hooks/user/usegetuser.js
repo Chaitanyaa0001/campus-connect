@@ -12,7 +12,6 @@ export const useGetUser = () => {
         withCredentials: true,
       });
       setUser(res.data);
-    const {username,email,profilephoto} = res.data;
 
     } catch (error) {
       console.error("Error fetching user:", error);

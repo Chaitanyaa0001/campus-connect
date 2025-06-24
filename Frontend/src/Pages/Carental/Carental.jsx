@@ -139,7 +139,7 @@ const { refetchResources } = useUserResources();
               <div className={`car-card ${!car.available ? 'disabled-card' : ''}`} key={car._id}>
               <div className="card-img">
                 <img
-                  src= {car.Choosefile}  alt={car.VechicleModel}
+                  src= {car.Choosefile} alt={car.VechicleModel}
                 />
               </div>
               <div className="car-rental-details">

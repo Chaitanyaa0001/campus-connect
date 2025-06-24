@@ -44,7 +44,7 @@ const Sidebar = () => {
             <div className="user-details">
               <Link to="/user">
                 <h3>{user?.username || "Loading..."}</h3>
-                <p>{user?.email || ""}</p>
+                <p className="email">{user?.email || ""}</p>
               </Link>
             </div>
           )}

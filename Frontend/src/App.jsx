@@ -13,7 +13,8 @@ import GetStarted from './Pages/GetStarted/GetStarted';
 import User from './Pages/userpage/User';
 import ProtectedRoute from './Components/protectedroute/protectedroute';
 
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -25,6 +26,18 @@ const App = () => {
 
   
     <>
+
+     <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored" // optional: dark | light | colored
+      />
     
     <Routes>
       <Route path='/User' element={ <ProtectedRoute><User/> </ProtectedRoute>}></Route>

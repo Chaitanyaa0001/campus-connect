@@ -3,16 +3,59 @@ import Sidebar from '../../Components/Sidebar/Sidebar';
 import './Discussion.css';
 import { FiUpload } from 'react-icons/fi';
 import { FaPaperPlane } from 'react-icons/fa';
-import {io} from 'socket.io-client';
+import {
+  initSocket,
+  connectSocket,
+  disconnectSocket,
+  getSocket,
+} from '../../socket/socket';
+import { useGetUser } from '../../hooks/user/usegetuser';
+import axios from 'axios';
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Discussion = () => {
-  const [messages, setMessages] = useState([
-    { name: 'Geetesh', text: 'Hope everyone like this!', time: '10 days ago' },
-    { name: 'Rishabh Verma', text: 'Yoooo', time: '10 days ago' },
-  ]);
-
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const messagesEndRef = useRef(null);
+
+  const { user } = useGetUser();
+
+  const getPublicMessages = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/messages/public`, {
+        withCredentials: true,
+      });
+      setMessages(response.data);
+    } catch (err) {
+      console.log(err.response?.data.message || "Something went wrong");
+    }
+  };
+
+  useEffect(() => {
+    const socket = initSocket();
+    connectSocket();
+
+    socket.emit("join", user?._id);
+    getPublicMessages();
+
+    socket.on('receiveMessage', (msg) => {
+      console.log("Socket message received:", msg);
+      setMessages(prev => [...prev, msg]);
+    });
+
+    // Optional: handle online users if needed
+    // socket.on("onlineUsers", (onlineUsers) => {
+    //   setOnlineUsers(onlineUsers);
+    // });
+
+    return () => {
+      socket.off("receiveMessage");
+      socket.off("onlineUsers");
+      disconnectSocket();
+    };
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -20,10 +63,20 @@ const Discussion = () => {
 
   const changeHandler = (e) => setInput(e.target.value);
 
-  const SubmitHandler = (e) => {
+  const SubmitHandler = async (e) => {
     e.preventDefault();
     if (input.trim()) {
-      setMessages([...messages, { name: 'You', text: input, time: 'Just now' }]);
+      const socket = getSocket();
+
+      const response = await axios.post(`${BASE_URL}/api/messages/public`,
+        { input },
+        { withCredentials: true }
+      );
+
+      const newMsg = response.data;
+
+      socket.emit('sendMessage', newMsg);
+      setMessages(prev => [...prev, newMsg]); // Optional immediate UI feedback
       setInput('');
     }
   };
@@ -36,18 +89,18 @@ const Discussion = () => {
         <div className="discussion-container">
           <div className="head">
             <h3>Wanna Have a Discussion?</h3>
-            <span className="online">1 user online 🟢</span>
+            <span className="online">{onlineUsers.length} user(s) online 🟢</span>
           </div>
 
           <div className="mess-content">
             {messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`message ${msg.name === 'You' ? 'sent' : 'received'}`}
+                className={`message ${msg?.senderId?._id === user?._id ? 'sent' : 'received'}`}
               >
                 <div className="msg-content">
-                  <div className="text">{msg.text}</div>
-                  <p>{msg.name} • {msg.time}</p>
+                  <div className="text">{msg?.message || "No message"}</div>
+                  <p>{msg?.senderId?.username || "Anonymous"} • {msg?.time || ""}</p>
                 </div>
               </div>
             ))}
@@ -56,16 +109,13 @@ const Discussion = () => {
 
           <form onSubmit={SubmitHandler} className="chat-input">
             <FiUpload size={24} className='Ficon' />
-            
-              <input
-                type="text"
-                placeholder="Type a message..."
-                value={input}
-                name="message"
-                onChange={changeHandler}
-                className="chat-textbox"
-              />
-         
+            <input
+              type="text"
+              placeholder="Type a message..."
+              value={input}
+              onChange={changeHandler}
+              className="chat-textbox"
+            />
             <button type="submit" className="send-btn">
               <FaPaperPlane size={24} />
             </button>

@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-const VITE_API_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 let socket;
 
@@ -9,7 +9,7 @@ const getSocket = () => {
 
 const initSocket = () => {
     if(!socket) {
-        socket = io(VITE_API_URL, {
+        socket = io(BASE_URL, {
             withCredentials : true,
             autoConnect : false,
             transports : ['websocket'],

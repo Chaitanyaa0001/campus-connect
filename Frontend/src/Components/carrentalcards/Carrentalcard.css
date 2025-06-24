@@ -9,7 +9,6 @@
   border-radius: 10px;
   padding: 1em;
   cursor: pointer;
-  align-items: flex-start;
 }
 
 .carrentalcard:hover {
@@ -18,8 +17,7 @@
 }
 
 .cardimg {
-  width: 30%;
-  min-width: 150px;
+  max-width: 40%;
 }
 
 .cardimg img {
