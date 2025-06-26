@@ -25,20 +25,21 @@ const postlostnfound = async (req, res) => {
       itemDescription,
       itemStatus,
       choosefile,
-      user : user._id
+      user: user._id,
     });
 
     user.lostnfound.push(_lostnfound._id);
     await user.save();
-    return res.status(201).json(_lostnfound);
 
+    // ✅ Populate the user before sending response
+    await _lostnfound.populate('user', '_id username email');
+
+    return res.status(201).json(_lostnfound);
   } catch (error) {
     console.error("Internal server error:", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-
 
 module.exports = {
   getalllostnfound,

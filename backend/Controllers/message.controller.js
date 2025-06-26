@@ -41,7 +41,7 @@ const getPrivateMessages = async (req, res) => {
                 { senderId : user1, receiverId : user2 },
                 { senderId : user2, receiverId : user1 }
             ]
-        }).populate('senderId receiverId', 'username profilePhoto');
+        }).populate('senderId receiverId');
 
         return res.status(200).json(messages);
     

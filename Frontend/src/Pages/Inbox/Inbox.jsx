@@ -30,8 +30,6 @@ const Inbox = () => {
   const [onlineUserList, setOnlineUserList] = useState([]);
 
   const messagesEndRef = useRef(null);
-
-  // Derived messages from chatHistory
   const messages = chatHistory[selectedUserId] || [];
 
   // Fetch conversations
@@ -46,38 +44,43 @@ const Inbox = () => {
         console.error("Fetch conversations error:", err);
       }
     };
-
     if (user) fetchConversations();
   }, [user]);
 
   // WebSocket setup
   useEffect(() => {
-    if (user) {
-      const socket = initSocket();
-      connectSocket();
+    const socket = initSocket();
+    connectSocket();
+
+    if (user?._id) {
+      console.log("🔌 Joining socket with:", user._id);
       socket.emit("join", user._id);
-
-      socket.on("onlineUsers", (users) => {
-        setOnlineUserList(users);
-      });
-
-      socket.on("receivePrivateMessage", (message) => {
-        const otherUserId = message.senderId === user._id ? message.receiverId : message.senderId;
-        setChatHistory(prev => ({
-          ...prev,
-          [otherUserId]: [...(prev[otherUserId] || []), message]
-        }));
-      });
-
-      return () => {
-        socket.off("onlineUsers");
-        socket.off("receivePrivateMessage");
-        disconnectSocket();
-      };
     }
+
+    socket.on("onlineUsers", (users) => {
+      setOnlineUserList(users);
+    });
+
+    socket.on("receivePrivateMessage", (message) => {
+      const senderId = typeof message.senderId === 'object' ? message.senderId._id : message.senderId;
+      const receiverId = typeof message.receiverId === 'object' ? message.receiverId._id : message.receiverId;
+
+      const otherUserId = senderId === user._id ? receiverId : senderId;
+
+      setChatHistory((prev) => ({
+        ...prev,
+        [otherUserId]: [...(prev[otherUserId] || []), message],
+      }));
+    });
+
+    return () => {
+      socket.off("onlineUsers");
+      socket.off("receivePrivateMessage");
+      disconnectSocket();
+    };
   }, [user]);
 
-  // Fetch messages when user is selected
+  // Fetch messages when a new user is selected
   useEffect(() => {
     const fetchMessages = async () => {
       if (selectedUserId && user && !chatHistory[selectedUserId]) {
@@ -85,11 +88,9 @@ const Inbox = () => {
           const res = await axios.get(`${BASE_URL}/api/messages/dm/${selectedUserId}`, {
             withCredentials: true,
           });
-          const fetchedMessages = res.data || [];
-
           setChatHistory((prev) => ({
             ...prev,
-            [selectedUserId]: fetchedMessages
+            [selectedUserId]: res.data || [],
           }));
         } catch (err) {
           console.error("Fetch messages error:", err);
@@ -104,7 +105,6 @@ const Inbox = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Handle message send
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -112,19 +112,22 @@ const Inbox = () => {
     try {
       const res = await axios.post(
         `${BASE_URL}/api/messages/dm/${selectedUserId}`,
-        { input },
+        { message: input },
         { withCredentials: true }
       );
 
       const message = res.data;
 
-      setChatHistory(prev => ({
+      setChatHistory((prev) => ({
         ...prev,
-        [selectedUserId]: [...(prev[selectedUserId] || []), message]
+        [selectedUserId]: [...(prev[selectedUserId] || []), message],
       }));
 
       const socket = getSocket();
-      socket.emit("privateMessage", { receiverId: selectedUserId, message });
+      socket.emit("privateMessage", {
+        receiverId: selectedUserId,
+        message,
+      });
 
       setInput('');
     } catch (err) {
@@ -135,7 +138,6 @@ const Inbox = () => {
   return (
     <div className="component-container">
       <Sidebar />
-
       <div id="inbox">
         {/* Contact List */}
         <div className="dm-container">
@@ -148,7 +150,6 @@ const Inbox = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-
           <ul>
             {conversation.map((conv, idx) => {
               const otherUser = conv.participants.find(p => p._id !== user?._id);
@@ -175,17 +176,21 @@ const Inbox = () => {
           </div>
 
           <div className="pvt-dm">
-            {messages.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`message ${msg.senderId === user?._id ? 'sent' : 'received'}`}
-              >
-                <div className="msg-content">
-                  <div className="text">{msg.message}</div>
-                  <p>{msg.time}</p>
+            {messages.map((msg, idx) => {
+              const senderId = typeof msg.senderId === 'object' ? msg.senderId._id : msg.senderId;
+              const isSent = senderId === user._id;
+              return (
+                <div
+                  key={idx}
+                  className={`message ${isSent ? 'sent' : 'received'}`}
+                >
+                  <div className="msg-content">
+                    <div className="text">{msg.message}</div>
+                    <p>{new Date(msg.createdAt || Date.now()).toLocaleTimeString()}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
             <div ref={messagesEndRef} />
           </div>
 

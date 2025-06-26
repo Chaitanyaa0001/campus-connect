@@ -6,6 +6,8 @@ const socketHandler = (io) => {
         console.log("User connected:", socket.id);
 
         socket.on("join", (userId) => {
+            console.log(userId);
+            
             onlineUsers.set(userId, socket.id);
             io.emit("onlineUsers", Array.from(onlineUsers.keys()))
         });
@@ -15,11 +17,13 @@ const socketHandler = (io) => {
         });
   
         socket.on("privateMessage", ({ receiverId, message }) => {
-            const receiverSocketId = onlineUsers.get(receiverId);
-            if(receiverSocketId) {
-                io.to(receiverSocketId).emit("receivePrivateMessage", message);
-            }
-        });
+           console.log(`📨 Message from ${message.senderId} to ${receiverId}:`, message);
+        const receiverSocketId = onlineUsers.get(receiverId);
+           if (receiverSocketId) {
+          io.to(receiverSocketId).emit("receivePrivateMessage", message);
+        }
+       });
+
   
         socket.on("disconnect", (reason) => {
             for (let [userId, id] of onlineUsers.entries()) {
