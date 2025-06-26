@@ -2,7 +2,7 @@ const LostnFound = require('../models/lostnfound.model');
 
 const getalllostnfound = async (req, res) => {
   try {
-    const lostnfound = await LostnFound.find();
+    const lostnfound = await LostnFound.find().populate('user', '_id username email');
     return res.status(200).json(lostnfound);
   } catch (error) {
     console.error("Internal server error:", error);

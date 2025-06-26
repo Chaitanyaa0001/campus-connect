@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import "./LostnFound.css";
 import { FaSearch } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+import { useGetUser } from "../../hooks/user/usegetuser";
 import { motion } from "framer-motion";
 import { uselostnfound } from "../../hooks/lostnfound/uselnfhooks";
 import { useAddlostnfound } from "../../hooks/lostnfound/useaddlnfhooks";
@@ -11,6 +13,8 @@ const LostnFound = () => {
   const { lostAndFound, getallLostnfound } = uselostnfound();
   const { createlostnfound } = useAddlostnfound();
   const { refetchResources } = useUserResources();
+  const navigate = useNavigate();
+  const {user} = useGetUser();
 
   const [showForm, setShowForm] = useState(false);
   const [searchquery, setsearchquery] = useState("");
@@ -26,7 +30,16 @@ const LostnFound = () => {
 
   const [imagefile, setImagefile] = useState(null);
 
-
+   const handleContactOwner = (user) => {
+    console.log(user);
+    
+     navigate(`/inbox`, {
+       state: {
+         receiverId: user?._id,
+         receiverUsername: user?.username 
+       },
+     });
+   };
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -207,7 +220,13 @@ const LostnFound = () => {
                   {item.itemStatus}
                 </p>
               </div>
-              <button className="contact">Contact</button>
+              {item.user._id !== user?._id && (
+              <button
+                className="contact" onClick={() => handleContactOwner(item.user)}>
+                Contact
+               </button>
+             )}
+
             </div>
           ))}
         </div>

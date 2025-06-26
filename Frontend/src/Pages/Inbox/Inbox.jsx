@@ -18,39 +18,55 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const Inbox = () => {
   const { user } = useGetUser();
   const location = useLocation();
-  const selectedReceiver = location?.state?.receiverId || ''; // from router state
+  const selectedReceiver = location?.state?.receiverId || '';
+  const selectedReceiverUsername = location?.state?.receiverUsername || '';
 
+  const [conversation, setConversation] = useState([]);
+  const [search, setSearch] = useState('');
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(selectedReceiver);
-  const [onlineUsers, setOnlineUsers] = useState([]);
+  const [selectedUsername, setSelectedUsername] = useState(selectedReceiverUsername);
+  const [chatHistory, setChatHistory] = useState({});
+  const [onlineUserList, setOnlineUserList] = useState([]);
 
   const messagesEndRef = useRef(null);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  // Derived messages from chatHistory
+  const messages = chatHistory[selectedUserId] || [];
 
-  // Connect to WebSocket and fetch messages
+  // Fetch conversations
+  useEffect(() => {
+    const fetchConversations = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/messages/conversations`, {
+          withCredentials: true,
+        });
+        setConversation(res.data);
+      } catch (err) {
+        console.error("Fetch conversations error:", err);
+      }
+    };
+
+    if (user) fetchConversations();
+  }, [user]);
+
+  // WebSocket setup
   useEffect(() => {
     if (user) {
       const socket = initSocket();
       connectSocket();
       socket.emit("join", user._id);
 
-      // Update online users
       socket.on("onlineUsers", (users) => {
-        setOnlineUsers(users);
+        setOnlineUserList(users);
       });
 
-      // Handle incoming private messages
       socket.on("receivePrivateMessage", (message) => {
-        if (
-          message.senderId === selectedUserId ||
-          message.receiverId === selectedUserId
-        ) {
-          setMessages((prev) => [...prev, message]);
-        }
+        const otherUserId = message.senderId === user._id ? message.receiverId : message.senderId;
+        setChatHistory(prev => ({
+          ...prev,
+          [otherUserId]: [...(prev[otherUserId] || []), message]
+        }));
       });
 
       return () => {
@@ -59,39 +75,53 @@ const Inbox = () => {
         disconnectSocket();
       };
     }
-  }, [user, selectedUserId]);
+  }, [user]);
 
-  // Fetch chat history
+  // Fetch messages when user is selected
   useEffect(() => {
     const fetchMessages = async () => {
-      if (selectedUserId && user) {
+      if (selectedUserId && user && !chatHistory[selectedUserId]) {
         try {
-          const response = await axios.get(`${BASE_URL}/api/messages/dm/${selectedUserId}`, {
+          const res = await axios.get(`${BASE_URL}/api/messages/dm/${selectedUserId}`, {
             withCredentials: true,
           });
-          setMessages(response.data.messages || []);
-        } catch (error) {
-          console.error("Failed to fetch messages", error);
+          const fetchedMessages = res.data || [];
+
+          setChatHistory((prev) => ({
+            ...prev,
+            [selectedUserId]: fetchedMessages
+          }));
+        } catch (err) {
+          console.error("Fetch messages error:", err);
         }
       }
     };
     fetchMessages();
-  }, [selectedUserId, user]);
+  }, [selectedUserId, user, chatHistory]);
 
-  // Handle send
+  // Scroll to bottom
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  // Handle message send
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
     try {
-      const response = await axios.post(
+      const res = await axios.post(
         `${BASE_URL}/api/messages/dm/${selectedUserId}`,
         { input },
         { withCredentials: true }
       );
 
-      const message = response.data;
-      setMessages((prev) => [...prev, message]);
+      const message = res.data;
+
+      setChatHistory(prev => ({
+        ...prev,
+        [selectedUserId]: [...(prev[selectedUserId] || []), message]
+      }));
 
       const socket = getSocket();
       socket.emit("privateMessage", { receiverId: selectedUserId, message });
@@ -107,25 +137,41 @@ const Inbox = () => {
       <Sidebar />
 
       <div id="inbox">
+        {/* Contact List */}
         <div className="dm-container">
           <div className="inbox-input">
             <FaSearch className='inbox-icon' />
-            <input type="text" placeholder='Search for contacts' />
+            <input
+              type="text"
+              placeholder='Search for contacts'
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
+
           <ul>
-            {onlineUsers.map((uid, idx) => (
-              uid !== user?._id && (
-                <li key={idx} onClick={() => setSelectedUserId(uid)}>
-                  Chat with {uid}
+            {conversation.map((conv, idx) => {
+              const otherUser = conv.participants.find(p => p._id !== user?._id);
+              if (!otherUser) return null;
+              return (
+                <li
+                  key={idx}
+                  onClick={() => {
+                    setSelectedUserId(otherUser._id);
+                    setSelectedUsername(otherUser.username);
+                  }}
+                >
+                  {otherUser.username}
                 </li>
-              )
-            ))}
+              );
+            })}
           </ul>
         </div>
 
+        {/* Chat Area */}
         <div className="dm-area">
           <div className="area-header">
-            <h2>{selectedUserId ? `Chatting with ${selectedUserId}` : "Select a User To Start Conversation!"}</h2>
+            <h2>{selectedUserId ? `Chatting with ${selectedUsername}` : "Select a User To Start Conversation!"}</h2>
           </div>
 
           <div className="pvt-dm">
@@ -136,13 +182,14 @@ const Inbox = () => {
               >
                 <div className="msg-content">
                   <div className="text">{msg.message}</div>
-                  <p>{msg.time || ''}</p>
+                  <p>{msg.time}</p>
                 </div>
               </div>
             ))}
             <div ref={messagesEndRef} />
           </div>
 
+          {/* Send Box */}
           <form onSubmit={handleSubmit} className="inbox-upload-container">
             <FiUpload size={24} className='inbox-upload-icon' />
             <input
