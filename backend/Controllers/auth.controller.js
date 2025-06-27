@@ -117,14 +117,13 @@ const googleLogin = async (req, res) => {
       user = await User.create({
         email,
         username,
-        profilePhoto,
+        profilephoto: profilePhoto, // ✅ match your schema
         password: null,
         authType: "google"
       });
     } else {
-      // Optional: update profile info if changed
       user.username = username;
-      user.profilePhoto = profilePhoto;
+      user.profilephoto = profilePhoto; // ✅ match your schema
       await user.save();
     }
 
@@ -132,18 +131,18 @@ const googleLogin = async (req, res) => {
       expiresIn: "7d"
     });
 
-    
+    // ✅ Set production-ready cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "Lax",
+      secure: true, // ✅ Required on HTTPS (Render)
+      sameSite: "None", // ✅ Required for cross-site cookie
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
     res.status(200).json({
       username: user.username,
       email: user.email,
-      profilePhoto: user.profilePhoto
+      profilephoto: user.profilephoto
     });
 
   } catch (error) {
@@ -151,5 +150,6 @@ const googleLogin = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 module.exports = { register, login, logout,googleLogin };
