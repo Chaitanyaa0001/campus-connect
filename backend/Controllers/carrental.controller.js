@@ -12,7 +12,6 @@ const getallcars = async (req, res) => {
     }
 };
 
-
 const postcarrental = async (req, res) => {
 
     try {
@@ -26,11 +25,7 @@ const postcarrental = async (req, res) => {
             VechicleDescription,
             Available,
         } = req.body;
-
-
         const Choosefile = req.file?.path 
-        
-
         if (
             !VechicleModel ||
             !RentalAmount ||
@@ -42,7 +37,6 @@ const postcarrental = async (req, res) => {
         ) {
             return res.status(400).json({ message: "All fields are required" });
         }
-
         const carrental = await CarRental.create({
             VechicleModel,
             RentalAmount,
@@ -53,17 +47,14 @@ const postcarrental = async (req, res) => {
             Choosefile,
             user: req.user._id
         });
-
         user.carrentals.push(carrental._id);
         await user.save();
         return res.status(201).json(carrental);
-
     } catch (error) {
         console.error("Internal server error:", error.message);
         return res.status(500).json({ message: "Internal Server Error" });
     }
 };
-
 module.exports = {
     getallcars,
     postcarrental,

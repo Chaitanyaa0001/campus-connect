@@ -45,17 +45,16 @@ const Discussion = () => {
       setMessages(prev => [...prev, msg]);
     });
 
-    // Optional: handle online users if needed
-    // socket.on("onlineUsers", (onlineUsers) => {
-    //   setOnlineUsers(onlineUsers);
-    // });
+    socket.on("onlineUsers", (users) => {
+      setOnlineUsers(users);
+    });
 
     return () => {
       socket.off("receiveMessage");
       socket.off("onlineUsers");
       disconnectSocket();
     };
-  }, []);
+  }, [user?._id]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -68,7 +67,8 @@ const Discussion = () => {
     if (input.trim()) {
       const socket = getSocket();
 
-      const response = await axios.post(`${BASE_URL}/api/messages/public`,
+      const response = await axios.post(
+        `${BASE_URL}/api/messages/public`,
         { input },
         { withCredentials: true }
       );
@@ -76,7 +76,6 @@ const Discussion = () => {
       const newMsg = response.data;
 
       socket.emit('sendMessage', newMsg);
-      setMessages(prev => [...prev, newMsg]); // Optional immediate UI feedback
       setInput('');
     }
   };

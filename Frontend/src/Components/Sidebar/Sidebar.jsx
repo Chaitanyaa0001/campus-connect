@@ -13,7 +13,7 @@ import "./Sidebar.css";
 import defaultAvatar from "../../assets/Profile.jpg";
 import { NavLink, Link } from "react-router-dom";
 import { useLogout } from "../../hooks/logouthooks/logouthook";
-import { useGetUser } from "../../hooks/user/usegetuser"; 
+import { useGetUser } from "../../hooks/user/usegetuser";
 
 const Sidebar = () => {
   const logout = useLogout();

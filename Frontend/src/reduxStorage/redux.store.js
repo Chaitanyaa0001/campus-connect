@@ -25,7 +25,6 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false, // prevent redux-persist warning
     }),
-  devTools: process.env.NODE_ENV !== 'production',
 });
 
 // Export persistor

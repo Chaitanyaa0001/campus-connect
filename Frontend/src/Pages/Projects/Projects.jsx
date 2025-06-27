@@ -3,7 +3,7 @@ import Sidebar from '../../Components/Sidebar/Sidebar';
 import './Projects.css';
 import { FaSearch, FaPlusCircle, FaCalendarAlt, FaUsers } from "react-icons/fa";
 import { motion } from 'framer-motion';
-import { useprojects } from '../../hooks/projectshooks/useprojectshooks';
+import { useprojects } from '../../hooks/projectshooks/useaddprojects';
 import { useaddprojects } from '../../hooks/projectshooks/useaddprojects';
 import { useUserResources } from '../../hooks/user/useUserresources';
 import { useGetUser } from '../../hooks/user/usegetuser';

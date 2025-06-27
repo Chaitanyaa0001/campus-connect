@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../ReduxFeatures/auth/auth.slice';
-import { jwtDecode } from 'jwt-decode'; // ✅ Correct named export
+import { jwtDecode } from 'jwt-decode'; 
 import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;

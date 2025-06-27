@@ -30,8 +30,6 @@ const postlostnfound = async (req, res) => {
 
     user.lostnfound.push(_lostnfound._id);
     await user.save();
-
-    // ✅ Populate the user before sending response
     await _lostnfound.populate('user', '_id username email');
 
     return res.status(201).json(_lostnfound);

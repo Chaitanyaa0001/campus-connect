@@ -29,9 +29,6 @@ const postcarpool = async(req,res) =>{
             pricePerSeat,
             user: user._id
         });
-      
-
-
         user.carpools.push(carpool._id);
         await user.save();
         return res.status(201).json(carpool);
@@ -41,8 +38,4 @@ const postcarpool = async(req,res) =>{
         return res.status(500).json({ message: "Internal Server Error" });
     }
 }
-
-
-
-
 module.exports = { getAllCarpools,postcarpool }

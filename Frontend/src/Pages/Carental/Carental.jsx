@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import './Carental.css';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import { FaCar } from "react-icons/fa";
-import { motion } from 'framer-motion'; // ✅ Import Framer Motion
+import { motion } from 'framer-motion';
 import { useCarRental } from '../../hooks/carrentalhooks/usecarrentalhook';
-import {useAddcarrental} from '../../hooks/carrentalhooks/useaddcarrental'
 import { useUserResources } from '../../hooks/user/useUserresources';
 import { useNavigate } from 'react-router-dom';
-import { useGetUser } from '../../hooks/user/usegetuser';
-
+import { useGetUser} from '../../hooks/user/usegetuser';
+import {useAddcarrental} from '../../hooks/carrentalhooks/useaddcarrental'
 
 
 
@@ -28,8 +27,6 @@ const handleContactOwner = (owner) => {
     }
   });
 };
-
-
   const [showForm, setShowForm] = useState(false);
   const [newCar, setNewCar] = useState({
   VechicleModel: '',
@@ -37,10 +34,9 @@ const handleContactOwner = (owner) => {
   RentalPeriod: '',
   VechileMileage: '',
   VechicleDescription: '',
-  Choosefile: 'carImage', // optional default
+  Choosefile: 'carImage', 
   Available: true
 });
-
 
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);

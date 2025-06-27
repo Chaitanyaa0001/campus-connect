@@ -68,9 +68,6 @@ const updateuser = async (req, res) => {
                 return res.status(400).json({ message: "All password fields are required!" });
             }    
             const isMatch = await bcrypt.compare(oldPassword, user.password);
-
-            
-
             if(!isMatch){ 
                 return res.status(401).json({ message: "Old password is incorrect" })
             };

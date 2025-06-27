@@ -80,7 +80,6 @@ const Login = () => {
           value={logindata.password}
           onChange={ChangeHandler}
         />
-
         <button type="submit">Login</button>
         <div className="google-login">
             <GoogleLogin
@@ -88,8 +87,6 @@ const Login = () => {
               onError={() => console.log("Google login failed")}
             />
         </div>
-
-
         <div className="Login-bottom">
           <p>Don't have an account? <Link to="/signup" className="signup-link">Signup</Link></p>
         </div>

@@ -65,16 +65,10 @@ const login = async (req, res) => {
         if (!existingUser) {
             return res.status(401).json({ message: "User does not exist!" });
         }
-         console.log("🧪 Login attempt:", password);
-         console.log("🔐 Hashed password:", existingUser.password);
-
         const isMatch = await bcrypt.compare(password, existingUser.password);
-       
-
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid email or password!" });
         }
-
         const loggedInUser = await User.findById(existingUser._id).select("-password");
         const token = generateToken(loggedInUser._id);
 

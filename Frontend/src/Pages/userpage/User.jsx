@@ -12,15 +12,9 @@ import Projectcard from '../../Components/projectcards/Projectcard';
 // hooks 
 import { useGetUser } from '../../hooks/user/usegetuser';
 import { useUpdateUser } from '../../hooks/user/useupdateuser';
-import  useDeleteUser from '../../hooks/user/usedeleteuser';
+import {useDeleteUser} from '../../hooks/user/usedeleteuser';
 import { useNavigate } from 'react-router-dom';
 import { useUserResources } from '../../hooks/user/useUserresources';
-
-
-
-
-
-
 
 const User = () => {
   const [selectedCategory, setSelectedCategory] = useState('profile');
