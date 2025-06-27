@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaUsers, FaCalendarAlt, FaTrash } from 'react-icons/fa';
+import { FaUsers, FaCalendarAlt } from 'react-icons/fa';
 import './Projectcard.css';
 
 const Projectcard = ({

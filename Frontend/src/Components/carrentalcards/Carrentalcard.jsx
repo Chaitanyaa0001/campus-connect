@@ -1,6 +1,5 @@
 import React from 'react';
 import "./Carrentalcard.css";
-import { FaTrash } from "react-icons/fa";
 
 
 

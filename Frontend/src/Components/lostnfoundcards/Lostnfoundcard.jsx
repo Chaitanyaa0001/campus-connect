@@ -1,6 +1,6 @@
 import React from 'react';
 import './Lostnfoundcard.css';
-import { FaTrash } from "react-icons/fa";
+
 
 const Lostnfoundcard = ({
   itemName,
