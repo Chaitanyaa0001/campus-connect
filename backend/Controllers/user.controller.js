@@ -90,7 +90,7 @@ const updateuser = async (req, res) => {
 
         }
         await user.save();
-        console.log(user);
+        
         return res.status(200).json({ message: "Profile updated successfully!" });
 
     } catch (err) {
