@@ -8,12 +8,15 @@ import { motion } from 'framer-motion'; // ✅ Import Framer Motion
 import { useCarpool } from '../../hooks/carpoolhooks/useCarpool';
 import { useAddCarpool } from '../../hooks/carpoolhooks/useaddcarpool';
 import { useUserResources } from '../../hooks/user/useUserresources';
+import { useGetUser } from '../../hooks/user/usegetuser';
+import { useNavigate } from 'react-router-dom';
 
 const Carpool = () => {
   const { carpools, setCarpools, loading, getAllCarpools } = useCarpool();
   const { addCarpool, carpoolData } = useAddCarpool();
   const { refetchResources } = useUserResources(); 
-
+  const {user} = useGetUser();
+  const navigate = useNavigate()
 
 
   const [searchquery, setsearchquery] = useState("");
@@ -25,6 +28,17 @@ const Carpool = () => {
     seatsAvailable: "",
     pricePerSeat: ""
   });
+
+  const handleContactOwner = (owner) => {
+  navigate(`/inbox`, {
+    state: {
+      receiverId: owner?._id,
+      receiverUsername: owner?.username,
+    },
+  });
+};
+
+
 
 
   const changeHandler = (e) => {
@@ -165,7 +179,9 @@ const Carpool = () => {
                 </div>
                 <div className="CP-bookings">
                   <h3>₹{CP.pricePerSeat} per seat</h3>
-                  <button>Request Ride</button>
+                  {CP?.user && user && CP.user._id !== user._id && (
+                    <button onClick={() => handleContactOwner(CP.user)}>Contact</button>
+                  )}
                 </div>
               </div>
             ))}

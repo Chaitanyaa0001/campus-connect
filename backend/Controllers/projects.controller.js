@@ -3,7 +3,7 @@ const Projects = require('../models/project.model');
 // GET all projects
 const getallprojects = async (req, res) => {
   try {
-    const projects = await Projects.find(); // Fixed: added await
+    const projects = await Projects.find().populate('user','_id username email') // Fixed: added await
     return res.status(200).json({ projects });
   } catch (error) {
     console.error("Projects error:", error);

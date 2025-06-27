@@ -6,6 +6,9 @@ import { motion } from 'framer-motion'; // ✅ Import Framer Motion
 import { useCarRental } from '../../hooks/carrentalhooks/usecarrentalhook';
 import {useAddcarrental} from '../../hooks/carrentalhooks/useaddcarrental'
 import { useUserResources } from '../../hooks/user/useUserresources';
+import { useNavigate } from 'react-router-dom';
+import { useGetUser } from '../../hooks/user/usegetuser';
+
 
 
 
@@ -13,6 +16,19 @@ const Carental = () => {
   const {carrental,getallcarrentals} = useCarRental();
   const {createcarrental} = useAddcarrental();
 const { refetchResources } = useUserResources();
+
+const { user } = useGetUser();
+const navigate = useNavigate();
+
+const handleContactOwner = (owner) => {
+  navigate(`/inbox`, {
+    state: {
+      receiverId: owner?._id,
+      receiverUsername: owner?.username
+    }
+  });
+};
+
 
   const [showForm, setShowForm] = useState(false);
   const [newCar, setNewCar] = useState({
@@ -153,7 +169,14 @@ const { refetchResources } = useUserResources();
                   <p>Milage:<span>{car.VechileMileage}</span></p>
                 </div>
               </div>
-              <span className="contact-owner">Contact Owner</span>
+              {car?.user && user && car.user._id !== user._id && (
+                <button
+                  className="contact-owner"
+                  onClick={() => handleContactOwner(car.user)}
+                >
+                  Contact Owner
+                </button>
+              )}
             </div>
             )
           })}

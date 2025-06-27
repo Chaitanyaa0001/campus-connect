@@ -6,12 +6,16 @@ import { motion } from 'framer-motion';
 import { useprojects } from '../../hooks/projectshooks/useprojectshooks';
 import { useaddprojects } from '../../hooks/projectshooks/useaddprojects';
 import { useUserResources } from '../../hooks/user/useUserresources';
+import { useGetUser } from '../../hooks/user/usegetuser';
+import { useNavigate } from 'react-router-dom';
 
 const Projects = () => {
   const [searchquery, setsearchquery] = useState("");
   const { projects, setprojects, getallprojects } = useprojects();
   const { createproject } = useaddprojects();
  const { refetchResources } = useUserResources();
+ const {user} = useGetUser();
+ const navigate = useNavigate();
 
   const [showForm, setShowForm] = useState(false);
   const [newProject, setNewProject] = useState({
@@ -24,6 +28,17 @@ const Projects = () => {
   });
 
   const [techInput, setTechInput] = useState("");
+
+  const handleContactOwner = (owner) =>{
+    console.log(owner ,"owner :");
+    
+    navigate(`/inbox`,{
+      state:{
+        receiverId : owner?._id,
+        receiverUsername : owner?.username
+      }
+    });
+  };
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -166,8 +181,10 @@ const Projects = () => {
               <div className="project-details">
                 <p className='description'>{project.Description}</p>
                 <div className="pro-date">
-                  <p><FaUsers /> {project.personrequired}</p>
-                  <p><FaCalendarAlt /> {project.dueDate}</p>
+                    <p><FaUsers /> {project.personrequired}</p>
+                    <p><FaCalendarAlt /> {new Date(project.dueDate).toLocaleDateString('en-IN', {
+                      day: 'numeric', month: 'short', year: 'numeric'
+                    })}</p>
                 </div>
 
                 <div className="technology">
@@ -178,9 +195,14 @@ const Projects = () => {
                 </div>
               </div>
 
-              <div className="project-booking">
-                <button>Get Involved</button>
-              </div>
+            <div className="project-booking">
+             {project?.user && user && project.user._id !== user._id && (
+  <button onClick={() => handleContactOwner(project.user)}>
+    Contact
+  </button>
+)}
+
+            </div>
             </div>
           ))}
         </div>

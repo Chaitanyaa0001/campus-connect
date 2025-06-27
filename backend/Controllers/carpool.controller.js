@@ -5,7 +5,7 @@ const User = require("../models/user.model")
 
 const getAllCarpools = async (req, res) => {
     try {
-        const carpools = await Carpool.find();
+        const carpools = await Carpool.find().populate('user','_id username email');
         return res.status(200).json(carpools);
     } catch (err) {
         return res.status(500).json({ message: 'internal Server Error' });

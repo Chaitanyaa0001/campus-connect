@@ -33,6 +33,8 @@
     box-shadow: 0 0 20px rgba(0, 191, 255, 0.1);
     border: 1px solid #222;
     text-align: left;
+    display: flex;
+    flex-direction: column;
 }
 #Login form p{
     margin: 0.8em 0em;
@@ -84,13 +86,11 @@
 }
 .google-login {
   margin-top: 1em;
+  align-self: center;
+  width:;
  
   text-align: center;
 }
 
-.google-login p {
-  margin-bottom: 10px;
-  font-weight: 500;
- 
-  /* color: #555; */
-}
+
+

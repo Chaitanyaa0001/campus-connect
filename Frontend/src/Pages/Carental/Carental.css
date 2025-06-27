@@ -140,6 +140,8 @@ input.form-available {
 .car-rental-details {
   padding: 0.8em;
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .name {
@@ -184,6 +186,10 @@ input.form-available {
   color: #1E97C3;
   font-size: 1rem;
   padding: 1em 0.8em;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  align-self: flex-end;
 }
 
 .loader-container {

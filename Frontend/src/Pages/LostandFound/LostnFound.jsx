@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import "./LostnFound.css";
 import { FaSearch } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { useGetUser } from "../../hooks/user/usegetuser";
 import { motion } from "framer-motion";
 import { uselostnfound } from "../../hooks/lostnfound/uselnfhooks";
@@ -13,14 +13,13 @@ const LostnFound = () => {
   const { lostAndFound, getallLostnfound } = uselostnfound();
   const { createlostnfound } = useAddlostnfound();
   const { refetchResources } = useUserResources();
+  const { user, loading } = useGetUser();
   const navigate = useNavigate();
-  const {user} = useGetUser();
 
   const [showForm, setShowForm] = useState(false);
-  const [searchquery, setsearchquery] = useState("");
+  const [searchquery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  
-
+  const [imagefile, setImagefile] = useState(null);
   const [newlnf, setNewlnf] = useState({
     itemName: "",
     itemDescription: "",
@@ -28,18 +27,14 @@ const LostnFound = () => {
     choosefile: "",
   });
 
-  const [imagefile, setImagefile] = useState(null);
-
-   const handleContactOwner = (user) => {
-    console.log(user);
-    
-     navigate(`/inbox`, {
-       state: {
-         receiverId: user?._id,
-         receiverUsername: user?.username 
-       },
-     });
-   };
+  const handleContactOwner = (owner) => {
+    navigate(`/inbox`, {
+      state: {
+        receiverId: owner?._id,
+        receiverUsername: owner?.username,
+      },
+    });
+  };
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -49,57 +44,53 @@ const LostnFound = () => {
   const imageHandler = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImagefile(file); // real file for upload
-      setNewlnf((prev) => ({ ...prev, choosefile: imageUrl })); // preview
+      setImagefile(file);
+      const previewUrl = URL.createObjectURL(file);
+      setNewlnf((prev) => ({ ...prev, choosefile: previewUrl }));
     }
   };
 
- const submitHandler = async (e) => {
-  e.preventDefault();
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      await createlostnfound(newlnf, imagefile);
+      setNewlnf({
+        itemName: "",
+        itemDescription: "",
+        itemStatus: "Lost",
+        choosefile: "",
+      });
+      setImagefile(null);
+      getallLostnfound();
+      refetchResources();
+      setShowForm(false);
+    } catch (err) {
+      console.error("Submission failed", err);
+    }
+  };
 
-  try {
-    await createlostnfound(newlnf, imagefile);
-    setNewlnf({
-      itemName: "",
-      itemDescription: "",
-      choosefile: "",
-    });
-    setImagefile(null);
-    getallLostnfound();
-    refetchResources();
-    setShowForm(false);
-  } catch (err) {
-    console.error("Submission failed", err);
+  if (loading || !user || !lostAndFound) {
+    return (
+      <div className="loader-container">
+        <motion.div
+          className="loader"
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+        />
+        <p>Loading Lost & Found...</p>
+      </div>
+    );
   }
-};
 
-
-  if (!lostAndFound) {
-      return (
-        <div className="loader-container">
-          <motion.div
-            className="loader"
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-          />
-          <p>Loading Car Rentals...</p>
-       </div>  
-      );
-  }
-
-  const filteredlostnfound = lostAndFound?.filter((item) => {
+  const filteredItems = lostAndFound.filter((item) => {
     const query = searchquery.toLowerCase();
     const matchesQuery =
       item.itemName?.toLowerCase().includes(query) ||
       item.itemDescription?.toLowerCase().includes(query);
     const matchesStatus =
-      statusFilter === "All" ||
-      statusFilter === "" ||
-      item.itemStatus === statusFilter;
+      statusFilter === "All" || statusFilter === "" || item.itemStatus === statusFilter;
     return matchesQuery && matchesStatus;
-  }) || [];
-
+  });
 
   return (
     <div className="component-container">
@@ -137,8 +128,7 @@ const LostnFound = () => {
               value={newlnf.itemDescription}
               onChange={changeHandler}
               required
-            ></textarea>
-
+            />
             <div className="radio-group">
               <label>
                 <input
@@ -161,54 +151,39 @@ const LostnFound = () => {
                 Found
               </label>
             </div>
-
-            <input type="file"  name="choosefile" accept="image/*" onChange={imageHandler} />
+            <input type="file" accept="image/*" onChange={imageHandler} />
             {newlnf.choosefile && (
-              <img
-                src={newlnf.choosefile}
-                alt="Preview"
-                className="upload-image"
-                style={{ width: "100px", marginTop: "10px" }}
-              />
+              <img src={newlnf.choosefile} alt="Preview" className="upload-image" />
             )}
             <button type="submit" className="submit-lnf">Submit</button>
           </form>
         )}
 
         <div className="search-container">
-          <FaSearch size={22} className="search-icon" />
+          <FaSearch className="search-icon" />
           <input
             type="text"
             className="search-box"
             placeholder="Search for lost items..."
             value={searchquery}
-            onChange={(e) => setsearchquery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
         <div className="tab-buttons">
-          <button
-            className={statusFilter === "All" ? "tab active" : "tab"}
-            onClick={() => setStatusFilter("All")}
-          >
-            All Items
-          </button>
-          <button
-            className={statusFilter === "Lost" ? "tab active" : "tab"}
-            onClick={() => setStatusFilter("Lost")}
-          >
-            Lost Items
-          </button>
-          <button
-            className={statusFilter === "Found" ? "tab active" : "tab"}
-            onClick={() => setStatusFilter("Found")}
-          >
-            Found Items
-          </button>
+          {["All", "Lost", "Found"].map((status) => (
+            <button
+              key={status}
+              className={statusFilter === status ? "tab active" : "tab"}
+              onClick={() => setStatusFilter(status)}
+            >
+              {status} Items
+            </button>
+          ))}
         </div>
 
         <div className="lnf-cards">
-          {filteredlostnfound.map((item, index) => (
+          {filteredItems.map((item, index) => (
             <div className="lnf-card" key={index}>
               <div className="lnf-img">
                 <img src={item.choosefile} alt={item.itemName} />
@@ -216,17 +191,13 @@ const LostnFound = () => {
               <div className="lnf-details">
                 <h3>{item.itemName}</h3>
                 <p>{item.itemDescription}</p>
-                <p className={`lnf-status ${item.itemStatus.toLowerCase()}`}>
-                  {item.itemStatus}
-                </p>
+                <p className={`lnf-status ${item.itemStatus.toLowerCase()}`}>{item.itemStatus}</p>
               </div>
-              {item.user._id !== user?._id && (
-              <button
-                className="contact" onClick={() => handleContactOwner(item.user)}>
-                Contact
-               </button>
-             )}
-
+              {item.user?._id !== user._id && (
+                <button className="contact" onClick={() => handleContactOwner(item.user)}>
+                  Contact
+                </button>
+              )}
             </div>
           ))}
         </div>

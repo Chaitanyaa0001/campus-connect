@@ -32,6 +32,16 @@ const Inbox = () => {
   const messagesEndRef = useRef(null);
   const messages = chatHistory[selectedUserId] || [];
 
+
+// 👇 Add this block to sync props from navigation state
+useEffect(() => {
+  if (selectedReceiver) {
+    setSelectedUserId(selectedReceiver);
+    setSelectedUsername(selectedReceiverUsername);
+  }
+}, [selectedReceiver, selectedReceiverUsername]);
+
+
   // Fetch conversations
   useEffect(() => {
     const fetchConversations = async () => {
