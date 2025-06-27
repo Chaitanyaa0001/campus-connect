@@ -3,10 +3,8 @@ const socketHandler = (io) => {
     const onlineUsers = new Map();
 
     io.on("connection", (socket) => {
-        console.log("User connected:", socket.id);
 
         socket.on("join", (userId) => {
-            console.log(userId);
             
             onlineUsers.set(userId, socket.id);
             io.emit("onlineUsers", Array.from(onlineUsers.keys()))
@@ -17,7 +15,6 @@ const socketHandler = (io) => {
         });
   
         socket.on("privateMessage", ({ receiverId, message }) => {
-           console.log(`📨 Message from ${message.senderId} to ${receiverId}:`, message);
         const receiverSocketId = onlineUsers.get(receiverId);
            if (receiverSocketId) {
           io.to(receiverSocketId).emit("receivePrivateMessage", message);
@@ -33,7 +30,6 @@ const socketHandler = (io) => {
                 }
             }
             io.emit("onlineUsers", Array.from(onlineUsers.keys()));
-            console.log("User disconnected:", socket.id, reason);
         });
     });
 }

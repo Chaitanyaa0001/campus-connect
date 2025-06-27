@@ -28,7 +28,7 @@ const Projectcard = ({
           ))}
         </div>
       </div>
-      <button className="projectbooking">Get Involved</button>
+      
     </div>
   );
 };

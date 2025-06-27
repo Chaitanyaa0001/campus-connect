@@ -22,7 +22,6 @@ const Carrentalcard = ({Choosefile,VechicleModel,VechicleDescription,RentalAmoun
           </div>
           <span className="amountcard">₹{RentalAmount}</span>
         </div>
-        <button className="contactownercard">Contact Owner</button>
       </div>
     </div>
   );

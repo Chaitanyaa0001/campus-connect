@@ -18,7 +18,7 @@ const Carpoolcard = ({ id, from, to, time, seatsAvailable, pricePerSeat, onDelet
         </div>
         <div className="CP-bookings">
           <h3>₹{pricePerSeat ?? 0} per seat</h3>
-          <button >Request Ride </button>
+          
         </div>
       </div>
     </div>

@@ -63,7 +63,6 @@ useEffect(() => {
     connectSocket();
 
     if (user?._id) {
-      console.log("🔌 Joining socket with:", user._id);
       socket.emit("join", user._id);
     }
 

@@ -9,7 +9,7 @@ export  const uselostnfound = ()=>{
         try {
             const response = await axios.get(`${BASE_URL}/api/lostnfound`, { withCredentials: true });
             setlostAndFound(response.data);
-            console.log(response.data);
+            
             
         } catch (error) {
             console.error("lostnfound hook error ");

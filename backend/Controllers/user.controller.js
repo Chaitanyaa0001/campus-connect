@@ -42,7 +42,6 @@ const updateuser = async (req, res) => {
 
         const user = await User.findById(userId._id);
         if (!user) {
-            console.log("✘ User not found");
             return res.status(404).json({ message: "User not found!" })
         };
 
@@ -59,7 +58,6 @@ const updateuser = async (req, res) => {
         if (email) user.email = email;
 
         if (req.file) {
-            console.log("✔ File uploaded to:", req.file.path);
             user.profilephoto = req.file.path; 
         }
 
@@ -138,7 +136,6 @@ const deleteUser = async (req, res) => {
 const getUserResources = async (req, res) => {
   try {
     const userId = req.user;
-    console.log("✅ Fetching resources for user:", userId);
 
     const [carpools, carrentals, projects, lostnfound] = await Promise.all([
       Carpool.find({ user: userId }),
@@ -146,7 +143,6 @@ const getUserResources = async (req, res) => {
       Projects.find({ user: userId }),
       LostnFound.find({ user: userId }),
     ]);
-       console.log("✅ Fetching resources for user:", userId);
     return res.status(200).json({
       carpools,
       carrentals,

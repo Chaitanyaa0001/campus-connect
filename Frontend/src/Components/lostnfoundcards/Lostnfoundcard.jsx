@@ -22,9 +22,7 @@ const Lostnfoundcard = ({
             {itemStatus}
           </p>
         </div>
-        <button className='contactcard'>
-         Contact
-        </button>
+        
       </div>
     </div>
   );
