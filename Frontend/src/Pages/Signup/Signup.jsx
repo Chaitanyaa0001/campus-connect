@@ -52,7 +52,7 @@ const Signup = () => {
   return (
     <div id="signup">
       <div className="heading">
-        <h2>UniVerse</h2>
+        <h2>Campus-Connect</h2>
         <h4>Join your campus community Today</h4>
       </div>
       <form onSubmit={submitHandler}>

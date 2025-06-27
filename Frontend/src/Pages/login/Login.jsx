@@ -8,6 +8,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import { useGoogleLoginHandler } from '../../hooks/google/usegoogle';
 import { toast } from 'react-toastify'; // ✅ Toastify import
 import 'react-toastify/dist/ReactToastify.css'; // ✅ Toastify CSS
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Login = () => {
 
@@ -31,7 +32,7 @@ const Login = () => {
     try {
       e.preventDefault();
 
-      const response = await axios.post(`http://localhost:4000/api/auth/login`,
+      const response = await axios.post(`${BASE_URL}/api/auth/login`,
         logindata,
         { withCredentials: true }
       )
@@ -55,7 +56,7 @@ const Login = () => {
   return (
     <div id='Login'>
       <div className="Login-heading">
-        <h1>Universe</h1>
+        <h1>Campus-Connect</h1>
         <h4>Your campus connected</h4>
       </div>
 
