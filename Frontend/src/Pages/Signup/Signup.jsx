@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify'; // ✅ Toastify import
 import 'react-toastify/dist/ReactToastify.css'; // ✅ Toastify CSS
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 const Signup = () => {
 
@@ -27,7 +29,7 @@ const Signup = () => {
     try {
       e.preventDefault();
 
-      const response = await axios.post(`http://localhost:4000/api/auth/register`, signupData, { withCredentials: true });
+      const response = await axios.post(`${BASE_URL}/api/auth/register`, signupData, { withCredentials: true });
 
       if (response.status === 201) {
         toast.success("Signup successful! Redirecting...");

@@ -1,8 +1,7 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom';
 import Signup from './Pages/Signup/Signup';
-import Login from './Pages/Login/Login';
-import Sidebar from './Components/Sidebar/Sidebar';
+import Login from './Pages/login/Login';
 import Carpool from './Pages/carpool/Carpool';
 import LostnFound from './Pages/LostandFound/LostnFound';
 import Carental from './Pages/Carental/Carental';
