@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaTrash, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 import { MdLocationOn, MdAirlineSeatReclineNormal } from 'react-icons/md';
-import './carpoolcard.css';
+import './Carpoolcard.css';
 
 const Carpoolcard = ({ id, from, to, time, seatsAvailable, pricePerSeat, onDeleteLocal }) => {
   return (
