@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import { uselostnfound } from "../../hooks/lostnfound/uselnfhooks";
 import { useAddlostnfound } from "../../hooks/lostnfound/useaddlnfhooks";
 import { useUserResources } from "../../hooks/user/useUserresources";
+import { toast } from "react-toastify"; // ✅ Toastify import
+import "react-toastify/dist/ReactToastify.css"; // ✅ Toastify CSS
 
 const LostnFound = () => {
   const { lostAndFound, getallLostnfound } = uselostnfound();
@@ -64,8 +66,10 @@ const LostnFound = () => {
       getallLostnfound();
       refetchResources();
       setShowForm(false);
+      toast.success("Lost/Found item posted successfully!"); // ✅ Success toast
     } catch (err) {
       console.error("Submission failed", err);
+      toast.error("Failed to submit item. Please try again."); // ✅ Error toast
     }
   };
 

@@ -3,15 +3,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { loginSuccess} from '../../ReduxFeatures/auth/auth.slice';
+import { loginSuccess } from '../../ReduxFeatures/auth/auth.slice';
 import { GoogleLogin } from '@react-oauth/google';
 import { useGoogleLoginHandler } from '../../hooks/google/usegoogle';
+import { toast } from 'react-toastify'; // ✅ Toastify import
+import 'react-toastify/dist/ReactToastify.css'; // ✅ Toastify CSS
 
 const Login = () => {
 
   const { handleGoogleLoginSuccess } = useGoogleLoginHandler();
   const navigate = useNavigate();
-  const dispatch =  useDispatch();
+  const dispatch = useDispatch();
   const [logindata, setlogindata] = useState({
     email: '',
     password: ''
@@ -23,33 +25,30 @@ const Login = () => {
       ...prev,
       [name]: value
     }));
-  }; 
+  };
 
-
-  const SubmitHandler =  async (e) => {
+  const SubmitHandler = async (e) => {
     try {
-        e.preventDefault();
+      e.preventDefault();
 
-        const response = await axios.post(`http://localhost:4000/api/auth/login`,
-          logindata,
-          {withCredentials:true}
-        )
-        if (response.status === 200){
-          dispatch(loginSuccess(response.data))
-          console.log("kogin dispatched ",response.data);
-          
-          navigate('/discussion')
+      const response = await axios.post(`http://localhost:4000/api/auth/login`,
+        logindata,
+        { withCredentials: true }
+      )
+      if (response.status === 200) {
+        dispatch(loginSuccess(response.data));
+        toast.success("Login successful! Redirecting...");
+        navigate('/discussion');
+      }
 
-        }
-       // Clear form
-        setlogindata({
-          email: '',
-          password: ''
+      setlogindata({
+        email: '',
+        password: ''
       });
-      
+
     } catch (error) {
       console.error("Error response:", error.response?.data || error.message);
-      alert(error.response?.data?.message || "Signup failed");
+      toast.error(error.response?.data?.message || "Login failed");
     }
   };
 
@@ -61,9 +60,9 @@ const Login = () => {
       </div>
 
       <form onSubmit={SubmitHandler}>
-      <h1>Login</h1>
-      <h4>Enter your credentials to access your account</h4>
-      <p>Email</p>
+        <h1>Login</h1>
+        <h4>Enter your credentials to access your account</h4>
+        <p>Email</p>
         <input
           type="text"
           placeholder='Email'
@@ -82,10 +81,10 @@ const Login = () => {
         />
         <button type="submit">Login</button>
         <div className="google-login">
-            <GoogleLogin
-              onSuccess={handleGoogleLoginSuccess}
-              onError={() => console.log("Google login failed")}
-            />
+          <GoogleLogin
+            onSuccess={handleGoogleLoginSuccess}
+            onError={() => console.log("Google login failed")}
+          />
         </div>
         <div className="Login-bottom">
           <p>Don't have an account? <Link to="/signup" className="signup-link">Signup</Link></p>

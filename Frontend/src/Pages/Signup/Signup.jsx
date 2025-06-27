@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import './Signup.css'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify'; // ✅ Toastify import
+import 'react-toastify/dist/ReactToastify.css'; // ✅ Toastify CSS
 
 const Signup = () => {
 
@@ -28,7 +30,8 @@ const Signup = () => {
       const response = await axios.post(`http://localhost:4000/api/auth/register`, signupData, { withCredentials: true });
 
       if (response.status === 201) {
-        navigate('/login');
+        toast.success("Signup successful! Redirecting...");
+        setTimeout(() => navigate('/login'), 1500);
       }
 
       setSignupData({
@@ -40,7 +43,7 @@ const Signup = () => {
     }
     catch (err) {
       console.error("Error response:", err.response?.data || err.message);
-       alert(err.response?.data?.message || "Signup failed");
+      toast.error(err.response?.data?.message || "Signup failed");
     }
   }
 
@@ -95,4 +98,4 @@ const Signup = () => {
   )
 }
 
-export default Signup
+export default Signup;

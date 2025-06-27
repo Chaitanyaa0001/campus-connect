@@ -3,19 +3,21 @@ import Sidebar from '../../Components/Sidebar/Sidebar';
 import './Projects.css';
 import { FaSearch, FaPlusCircle, FaCalendarAlt, FaUsers } from "react-icons/fa";
 import { motion } from 'framer-motion';
-import { useprojects } from '../../hooks/projectshooks/useaddprojects';
-import { useaddprojects } from '../../hooks/projectshooks/useaddprojects';
+import { useprojects } from '../../hooks/projectshooks/useprojectshooks';
 import { useUserResources } from '../../hooks/user/useUserresources';
 import { useGetUser } from '../../hooks/user/usegetuser';
 import { useNavigate } from 'react-router-dom';
+import { useaddprojects } from '../../hooks/projectshooks/useaddprojects';
+import { toast } from 'react-toastify'; // ✅ Toastify import
+import 'react-toastify/dist/ReactToastify.css'; // ✅ Toastify CSS
 
 const Projects = () => {
   const [searchquery, setsearchquery] = useState("");
   const { projects, setprojects, getallprojects } = useprojects();
   const { createproject } = useaddprojects();
- const { refetchResources } = useUserResources();
- const {user} = useGetUser();
- const navigate = useNavigate();
+  const { refetchResources } = useUserResources();
+  const { user } = useGetUser();
+  const navigate = useNavigate();
 
   const [showForm, setShowForm] = useState(false);
   const [newProject, setNewProject] = useState({
@@ -29,13 +31,11 @@ const Projects = () => {
 
   const [techInput, setTechInput] = useState("");
 
-  const handleContactOwner = (owner) =>{
-    console.log(owner ,"owner :");
-    
-    navigate(`/inbox`,{
-      state:{
-        receiverId : owner?._id,
-        receiverUsername : owner?.username
+  const handleContactOwner = (owner) => {
+    navigate(`/inbox`, {
+      state: {
+        receiverId: owner?._id,
+        receiverUsername: owner?.username
       }
     });
   };
@@ -52,7 +52,9 @@ const Projects = () => {
 
     await createproject(finalProject);
     await getallprojects();
-    refetchResources()
+    refetchResources();
+
+    toast.success("Project created successfully!"); // ✅ Toast on project creation
 
     setNewProject({
       projectTitle: "",
@@ -67,24 +69,23 @@ const Projects = () => {
   };
 
   if (!projects) {
-  return (
-    <div className="loader-container">
-      <div className="loader"></div>
-      <p>Loading projects...</p>
-    </div>
-  );
-}
+    return (
+      <div className="loader-container">
+        <div className="loader"></div>
+        <p>Loading projects...</p>
+      </div>
+    );
+  }
 
-    const filteredProjects =  projects?.filter(project => {
-      if(!project) return false;
-         const query = searchquery.toLowerCase();
-         return (
-           project.projectTitle?.toLowerCase().includes(query) ||
-           project.Description?.toLowerCase().includes(query) ||
-           project.Category?.toLowerCase().includes(query)
-         );
-       }) || [];
-
+  const filteredProjects = projects?.filter(project => {
+    if (!project) return false;
+    const query = searchquery.toLowerCase();
+    return (
+      project.projectTitle?.toLowerCase().includes(query) ||
+      project.Description?.toLowerCase().includes(query) ||
+      project.Category?.toLowerCase().includes(query)
+    );
+  }) || [];
 
   return (
     <div className='component-container'>
@@ -181,10 +182,10 @@ const Projects = () => {
               <div className="project-details">
                 <p className='description'>{project.Description}</p>
                 <div className="pro-date">
-                    <p><FaUsers /> {project.personrequired}</p>
-                    <p><FaCalendarAlt /> {new Date(project.dueDate).toLocaleDateString('en-IN', {
-                      day: 'numeric', month: 'short', year: 'numeric'
-                    })}</p>
+                  <p><FaUsers /> {project.personrequired}</p>
+                  <p><FaCalendarAlt /> {new Date(project.dueDate).toLocaleDateString('en-IN', {
+                    day: 'numeric', month: 'short', year: 'numeric'
+                  })}</p>
                 </div>
 
                 <div className="technology">
@@ -195,14 +196,13 @@ const Projects = () => {
                 </div>
               </div>
 
-            <div className="project-booking">
-             {project?.user && user && project.user._id !== user._id && (
-  <button onClick={() => handleContactOwner(project.user)}>
-    Contact
-  </button>
-)}
-
-            </div>
+              <div className="project-booking">
+                {project?.user && user && project.user._id !== user._id && (
+                  <button onClick={() => handleContactOwner(project.user)}>
+                    Contact
+                  </button>
+                )}
+              </div>
             </div>
           ))}
         </div>

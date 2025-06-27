@@ -29,14 +29,14 @@ const App = () => {
 
      <ToastContainer
         position="top-right"
-        autoClose={2000}
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="colored" // optional: dark | light | colored
+        theme="colored" // or "light", "dark"
       />
     
     <Routes>

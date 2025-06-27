@@ -20,7 +20,7 @@ const Projectcard = ({
         <p className="description">{Description}</p>
         <div className="pro-date">
           <p><FaUsers /> {personrequired}</p>
-          <p><FaCalendarAlt /> {dueDate}</p>
+          <p><FaCalendarAlt /> {new Date(dueDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
         </div>
         <div className="technology">
           {Technologies?.map((tech, i) => (

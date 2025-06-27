@@ -6,37 +6,37 @@ import { motion } from 'framer-motion';
 import { useCarRental } from '../../hooks/carrentalhooks/usecarrentalhook';
 import { useUserResources } from '../../hooks/user/useUserresources';
 import { useNavigate } from 'react-router-dom';
-import { useGetUser} from '../../hooks/user/usegetuser';
-import {useAddcarrental} from '../../hooks/carrentalhooks/useaddcarrental'
-
-
+import { useGetUser } from '../../hooks/user/usegetuser';
+import { useAddcarrental } from '../../hooks/carrentalhooks/useaddcarrental';
+import { toast } from 'react-toastify'; // ✅ Toastify import
+import 'react-toastify/dist/ReactToastify.css'; // ✅ Toastify CSS
 
 const Carental = () => {
-  const {carrental,getallcarrentals} = useCarRental();
-  const {createcarrental} = useAddcarrental();
-const { refetchResources } = useUserResources();
+  const { carrental, getallcarrentals } = useCarRental();
+  const { createcarrental } = useAddcarrental();
+  const { refetchResources } = useUserResources();
+  const { user } = useGetUser();
+  const navigate = useNavigate();
 
-const { user } = useGetUser();
-const navigate = useNavigate();
+  const handleContactOwner = (owner) => {
+    navigate(`/inbox`, {
+      state: {
+        receiverId: owner?._id,
+        receiverUsername: owner?.username
+      }
+    });
+  };
 
-const handleContactOwner = (owner) => {
-  navigate(`/inbox`, {
-    state: {
-      receiverId: owner?._id,
-      receiverUsername: owner?.username
-    }
-  });
-};
   const [showForm, setShowForm] = useState(false);
   const [newCar, setNewCar] = useState({
-  VechicleModel: '',
-  RentalAmount: '',
-  RentalPeriod: '',
-  VechileMileage: '',
-  VechicleDescription: '',
-  Choosefile: 'carImage', 
-  Available: true
-});
+    VechicleModel: '',
+    RentalAmount: '',
+    RentalPeriod: '',
+    VechileMileage: '',
+    VechicleDescription: '',
+    Choosefile: 'carImage',
+    Available: true
+  });
 
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -57,46 +57,46 @@ const handleContactOwner = (owner) => {
     }
   };
 
-  const handleSubmit =  async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createcarrental(newCar,imageFile)
+      await createcarrental(newCar, imageFile);
       await getallcarrentals();
-       refetchResources();
+      refetchResources();
 
-    const id = Date.now();
-    setShowForm(false);
-    setNewCar({
-      VechicleModel: '',
-      RentalAmount: '',
-      RentalPeriod: '',
-      VechileMileage: '',
-      VechicleDescription: '',
-      Choosefile: '',
-      Available: true 
-     });
+      setShowForm(false);
+      setNewCar({
+        VechicleModel: '',
+        RentalAmount: '',
+        RentalPeriod: '',
+        VechileMileage: '',
+        VechicleDescription: '',
+        Choosefile: '',
+        Available: true
+      });
 
-    setImageFile(null);
-    setImagePreview(null);
-      
+      setImageFile(null);
+      setImagePreview(null);
+
+      toast.success("Car rental posted successfully!"); // ✅ Success Toast
     } catch (error) {
-      console.error("carrental  submition failed !!");      
+      console.error("carrental  submition failed !!");
+      toast.error("Failed to post car rental."); // ✅ Error Toast
     }
   };
-      if (!carrental) {
-        return (
-          <div className="loader-container">
-            <motion.div
-              className="loader"
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-            />
-            <p>Loading Car Rentals...</p>
-          </div>
-        );
-      }
 
-
+  if (!carrental) {
+    return (
+      <div className="loader-container">
+        <motion.div
+          className="loader"
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+        />
+        <p>Loading Car Rentals...</p>
+      </div>
+    );
+  }
 
   return (
     <div className='component-container'>
@@ -124,15 +124,13 @@ const handleContactOwner = (owner) => {
               <input type="text" name="RentalPeriod" placeholder="Rental Period" value={newCar.RentalPeriod} onChange={handleChange} required />
               <input type="text" name="VechileMileage" placeholder="Vehicle Mileage" value={newCar.VechileMileage} onChange={handleChange} required />
               <textarea name="VechicleDescription" placeholder="Vehicle Description" value={newCar.VechicleDescription} onChange={handleChange} required></textarea>
-
-
               <label>
                 <input type="checkbox" className='form-available' name="Available" checked={newCar.Available} onChange={handleChange} />
                 Available
               </label>
             </div>
 
-            <input type="file" accept="image/*"  onChange={handleImageChange} />
+            <input type="file" accept="image/*" onChange={handleImageChange} />
             {imagePreview && (
               <img
                 src={imagePreview}
@@ -147,34 +145,35 @@ const handleContactOwner = (owner) => {
 
         <div className="car-rental-cards">
           {carrental.map(car => {
-            return(
+            return (
               <div className={`car-card ${!car.available ? 'disabled-card' : ''}`} key={car._id}>
-              <div className="card-img">
-                <img
-                  src= {car.Choosefile} alt={car.VechicleModel}
-                />
-              </div>
-              <div className="car-rental-details">
-                <div className="name">
-                  <h2>{car.VechicleModel}</h2>
-                  <span className="amount">{car.RentalAmount}</span>
+                <div className="card-img">
+                  <img
+                    src={car.Choosefile}
+                    alt={car.VechicleModel}
+                  />
                 </div>
-                <p className="car-description">{car.VechicleDescription}</p>
-                <div className="available">
-                  <p>Amount:<span> {car.RentalPeriod}</span></p>
-                  <p>Milage:<span>{car.VechileMileage}</span></p>
+                <div className="car-rental-details">
+                  <div className="name">
+                    <h2>{car.VechicleModel}</h2>
+                    <span className="amount">{car.RentalAmount}</span>
+                  </div>
+                  <p className="car-description">{car.VechicleDescription}</p>
+                  <div className="available">
+                    <p>Amount:<span> {car.RentalPeriod}</span></p>
+                    <p>Milage:<span>{car.VechileMileage}</span></p>
+                  </div>
                 </div>
+                {car?.user && user && car.user._id !== user._id && (
+                  <button
+                    className="contact-owner"
+                    onClick={() => handleContactOwner(car.user)}
+                  >
+                    Contact Owner
+                  </button>
+                )}
               </div>
-              {car?.user && user && car.user._id !== user._id && (
-                <button
-                  className="contact-owner"
-                  onClick={() => handleContactOwner(car.user)}
-                >
-                  Contact Owner
-                </button>
-              )}
-            </div>
-            )
+            );
           })}
         </div>
       </motion.div>

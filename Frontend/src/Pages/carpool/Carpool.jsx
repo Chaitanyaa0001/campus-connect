@@ -5,19 +5,20 @@ import './Carpool.css';
 import { FaUsers, FaSearch, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 import { MdLocationOn, MdAirlineSeatReclineNormal } from 'react-icons/md';
 import { motion } from 'framer-motion'; //
-import { useCarpool} from '../../hooks/carpoolhooks/useCarpool';
-import {useAddCarpool} from  '../../hooks/carpoolhooks/useaddcarpool';
+import { useCarpool } from '../../hooks/carpoolhooks/useCarpool';
+import { useAddCarpool } from '../../hooks/carpoolhooks/useaddcarpool';
 import { useUserResources } from '../../hooks/user/useUserresources';
 import { useGetUser } from '../../hooks/user/usegetuser';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify'; // ✅ Added
+import 'react-toastify/dist/ReactToastify.css'; // ✅ Added
 
 const Carpool = () => {
   const { carpools, setCarpools, loading, getAllCarpools } = useCarpool();
   const { addCarpool, carpoolData } = useAddCarpool();
-  const { refetchResources } = useUserResources(); 
-  const {user} = useGetUser();
-  const navigate = useNavigate()
-
+  const { refetchResources } = useUserResources();
+  const { user } = useGetUser();
+  const navigate = useNavigate();
 
   const [searchquery, setsearchquery] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -30,16 +31,13 @@ const Carpool = () => {
   });
 
   const handleContactOwner = (owner) => {
-  navigate(`/inbox`, {
-    state: {
-      receiverId: owner?._id,
-      receiverUsername: owner?.username,
-    },
-  });
-};
-
-
-
+    navigate(`/inbox`, {
+      state: {
+        receiverId: owner?._id,
+        receiverUsername: owner?.username,
+      },
+    });
+  };
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -48,22 +46,25 @@ const Carpool = () => {
 
   const Submithandler = async (e) => {
     e.preventDefault();
+    try {
+      await addCarpool(newRide);
+      await getAllCarpools();
+      refetchResources();
 
-    await addCarpool(newRide);
-    getAllCarpools();
-    refetchResources(); 
+      setNewRide({
+        from: "",
+        to: "",
+        time: "",
+        seatsAvailable: "",
+        pricePerSeat: ""
+      });
 
-
-    setNewRide({
-      from: "",
-      to: "",
-      time: "",
-      seatsAvailable: "",
-      pricePerSeat: ""
-    });
-
-
-    setShowForm(false);
+      setShowForm(false);
+      toast.success("Carpool ride added successfully!"); // ✅ Toast
+    } catch (error) {
+      console.error("Error adding carpool:", error);
+      toast.error("Failed to post carpool ride."); // ✅ Error Toast
+    }
   };
 
   const filteredCarpools = carpools?.filter(carpool => {
@@ -78,16 +79,14 @@ const Carpool = () => {
     );
   }) || [];
 
-
-    if (!carpools) {
-      return (
-        <div className="loader-container">
-          <div className="loader"></div>
-          <p>Loading carpool rides...</p>
-        </div>
-      );
-    }
-
+  if (!carpools) {
+    return (
+      <div className="loader-container">
+        <div className="loader"></div>
+        <p>Loading carpool rides...</p>
+      </div>
+    );
+  }
 
   return (
     <>
