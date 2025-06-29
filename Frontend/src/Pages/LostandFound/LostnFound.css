@@ -214,3 +214,12 @@
 }
 
   
+.upload-image {
+  max-width: 200px;
+  max-height: 200px;
+  object-fit: cover;
+  margin: 0.8em 0;
+  border-radius: 5px;
+  border: 1px solid #2980b9;
+}
+

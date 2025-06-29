@@ -17,7 +17,7 @@ export const useAddcarrental = () => {
       formdata.append("VechicleDescription", carrental.VechicleDescription);
       formdata.append("Available", carrental.Available); // boolean preserved
       if (imagefile) {
-        formdata.append("Choosefile", imagefile); // 👈 change key if backend expects 'image' instead
+        formdata.append("Choosefile", imagefile); 
       }
       const response = await axios.post(
         ` ${BASE_URL}/api/carrental`,
