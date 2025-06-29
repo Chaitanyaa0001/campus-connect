@@ -34,7 +34,7 @@ const Carental = () => {
     RentalPeriod: '',
     VechileMileage: '',
     VechicleDescription: '',
-    Choosefile: 'carImage',
+    Choosefile: '',
     Available: true
   });
 
