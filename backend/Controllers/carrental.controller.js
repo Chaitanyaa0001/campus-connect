@@ -52,6 +52,7 @@ const postcarrental = async (req, res) => {
         return res.status(201).json(carrental);
     } catch (error) {
         console.error("Internal server error:", error.message);
+         console.error(error)
         return res.status(500).json({ message: "Internal Server Error" });
     }
 };
