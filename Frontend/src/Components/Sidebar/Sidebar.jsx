@@ -35,7 +35,7 @@ const Sidebar = () => {
         <div className="user-info">
           <Link to="/user" className="user-img">
             <img
-              src={user?.profilePhoto || defaultAvatar}
+              src={user?.profilephoto || defaultAvatar}
               alt="user profile"
             />
           </Link>
