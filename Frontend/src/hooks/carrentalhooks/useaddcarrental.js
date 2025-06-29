@@ -20,7 +20,7 @@ export const useAddcarrental = () => {
         formdata.append("Choosefile", imagefile); 
       }
       const response = await axios.post(
-        ` ${BASE_URL}/api/carrental`,
+        `${BASE_URL}/api/carrental`,
         formdata,
         {
           headers: {

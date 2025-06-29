@@ -17,6 +17,11 @@ const postcarrental = async (req, res) => {
     try {
         const user = req.user;
 
+        if (!req.user || !req.user._id) {
+        return res.status(401).json({ message: "Unauthorized. User not found." });
+    }
+
+
         const {
             VechicleModel,
             RentalAmount,
@@ -25,7 +30,13 @@ const postcarrental = async (req, res) => {
             VechicleDescription,
             Available,
         } = req.body;
-        const Choosefile = req.file?.path 
+
+        const Choosefile = req.file?.path ;
+            if (!req.file || !req.file.path) {
+                return res.status(400).json({ message: "Image upload failed" });
+            }
+
+
         if (
             !VechicleModel ||
             !RentalAmount ||
