@@ -13,7 +13,7 @@ const connectDB = require('./config/database.js');
 require('dotenv').config();
 
 
-// connection (mongo and cloudniary)
+// connection (mongo and cloudniary))) helo ooo 
 connectDB();
 require("./utils/cloudinary.js");
 
